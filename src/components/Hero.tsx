@@ -1,10 +1,20 @@
 import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import TextType from './TextType';
-import Spline from '@splinetool/react-spline';
-import { Suspense } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
+
+// Lazy load Spline to reduce initial bundle size
+const Spline = lazy(() => import('@splinetool/react-spline'));
 
 export const Hero = () => {
+  const [showSpline, setShowSpline] = useState(false);
+  
+  // Delay loading Spline until after initial render for faster first paint
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSpline(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const scrollToAbout = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -113,19 +123,28 @@ export const Hero = () => {
             {/* Glow effect behind the model */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-primary/10 rounded-3xl blur-3xl" />
             
-            <Suspense fallback={
+            {showSpline ? (
+              <Suspense fallback={
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+                    <span className="text-muted-foreground text-sm">Loading 3D Model...</span>
+                  </div>
+                </div>
+              }>
+                <Spline
+                  scene="https://prod.spline.design/j8QKnSumr15JHdFD/scene.splinecode"
+                  className="w-full h-full"
+                />
+              </Suspense>
+            ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
                   <span className="text-muted-foreground text-sm">Loading 3D Model...</span>
                 </div>
               </div>
-            }>
-              <Spline
-                scene="https://prod.spline.design/j8QKnSumr15JHdFD/scene.splinecode"
-                className="w-full h-full"
-              />
-            </Suspense>
+            )}
             
             {/* Creative welcome overlay to cover watermark */}
             <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
