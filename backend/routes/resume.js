@@ -10,9 +10,8 @@ const __dirname = dirname(__filename);
 // GET: Download resume
 router.get('/download', (req, res) => {
   try {
-    // Path to your resume file in the public folder
-    // You can store it as public/resume.pdf or similar
-    const resumePath = join(__dirname, '../../public/resume.pdf');
+    // Path to your resume file in the backend/public folder
+    const resumePath = join(__dirname, '../public/resume.pdf');
 
     // Check if file exists
     if (!fs.existsSync(resumePath)) {
