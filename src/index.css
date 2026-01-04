@@ -8,49 +8,6 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-
-    --primary: 195 100% 39%;
-    --primary-foreground: 0 0% 100%;
-    
-    --primary-glow: 189 94% 43%;
-    
-    --secondary: 24 95% 53%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-
-    --accent: 189 94% 43%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 195 100% 39%;
-
-    --radius: 0.75rem;
-    
-    --gradient-primary: linear-gradient(135deg, hsl(195 100% 39%), hsl(189 94% 43%));
-    --gradient-hero: linear-gradient(135deg, hsl(195 100% 39% / 0.1), hsl(189 94% 43% / 0.1));
-    --gradient-card: linear-gradient(135deg, hsl(0 0% 100% / 0.8), hsl(0 0% 100% / 0.4));
-    
-    --shadow-lg: 0 10px 40px -10px hsl(195 100% 39% / 0.2);
-    --shadow-glow: 0 0 30px hsl(189 94% 43% / 0.3);
-    
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .dark {
     --background: 222 47% 11%;
     --foreground: 210 40% 98%;
 
@@ -80,6 +37,8 @@ All colors MUST be HSL.
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 189 94% 43%;
+
+    --radius: 0.75rem;
     
     --gradient-primary: linear-gradient(135deg, hsl(195 100% 39%), hsl(189 94% 50%));
     --gradient-hero: linear-gradient(135deg, hsl(195 100% 39% / 0.15), hsl(189 94% 43% / 0.15));
@@ -87,6 +46,8 @@ All colors MUST be HSL.
     
     --shadow-lg: 0 10px 40px -10px hsl(189 94% 43% / 0.4);
     --shadow-glow: 0 0 40px hsl(195 100% 50% / 0.3);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
@@ -124,6 +85,15 @@ All colors MUST be HSL.
   
   .animate-slide-up {
     animation: slide-up 0.6s ease-out forwards;
+  }
+  
+  /* Electric border project card styles */
+  .project-electric-card {
+    transition: transform 0.3s ease;
+  }
+  
+  .project-electric-card:hover {
+    transform: translateY(-4px);
   }
 }
 

@@ -154,10 +154,6 @@ Update these values to customize the color scheme.
 5. Vercel will auto-detect Vite configuration
 6. Click "Deploy"
 
-### Deploy via Lovable
-
-Simply open [Lovable](https://lovable.dev/projects/595bf0a9-c8b3-4f3d-9bc0-9f5de066d4b8) and click on Share → Publish.
-
 ## 🔧 Available Scripts
 
 - `npm run dev` - Start development server

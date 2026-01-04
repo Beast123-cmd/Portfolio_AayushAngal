@@ -6,7 +6,7 @@ import { ContactForm } from './ContactForm';
 
 export const Contact = () => {
   const socialLinks = [
-    { icon: Github, label: 'GitHub', href: 'https://github.com/aayushangal' },
+    { icon: Github, label: 'GitHub', href: 'https://github.com/Beast123-cmd' },
     { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/aayushangal' },
     { icon: Mail, label: 'Kaggle', href: 'https://kaggle.com/aayushangal' },
   ];

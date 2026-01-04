@@ -8,11 +8,12 @@ export const skills: Skill[] = [
   { name: 'Python', level: 90, category: 'Programming' },
   { name: 'Machine Learning', level: 85, category: 'AI/ML' },
   { name: 'React', level: 80, category: 'Frontend' },
-  { name: 'Node.js', level: 75, category: 'Backend' },
+  { name: 'C++', level: 75, category: 'Programming' },
   { name: 'Data Science', level: 85, category: 'AI/ML' },
-  { name: 'Arduino', level: 70, category: 'Hardware' },
-  { name: 'Signal Processing', level: 75, category: 'AI/ML' },
-  { name: 'Tailwind CSS', level: 85, category: 'Frontend' },
+  { name: 'SQL', level: 80, category: 'Database' },
+  { name: 'HTML/CSS', level: 75, category: 'Frontend' },
+  { name: 'Git/GitHub', level: 85, category: 'Tools' },
+  { name: 'JavaScript', level: 80, category: 'Frontend' },
 ];
 
 export const skillCategories = [
@@ -22,14 +23,14 @@ export const skillCategories = [
   },
   {
     title: 'Web Development',
-    items: ['React', 'TypeScript', 'Node.js', 'Express', 'Tailwind CSS', 'HTML/CSS'],
+    items: ['React', 'TypeScript', 'HTML/CSS'],
   },
   {
     title: 'Data Science',
     items: ['Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'SQL', 'Data Analysis'],
   },
   {
-    title: 'Hardware & IoT',
-    items: ['Arduino', 'Raspberry Pi', 'Sensors', 'Circuit Design', 'Embedded Systems'],
+    title: 'Tools & Version Control',
+    items: ['Git', 'GitHub', 'VS Code', 'Docker'],
   },
 ];

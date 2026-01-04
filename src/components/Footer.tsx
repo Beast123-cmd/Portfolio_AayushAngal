@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Heart } from 'lucide-react';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -14,10 +13,8 @@ export const Footer = () => {
           viewport={{ once: true }}
           className="text-center"
         >
-          <p className="text-muted-foreground flex items-center justify-center gap-2">
-            © {currentYear} Aayush Angal. Built with{' '}
-            <Heart className="h-4 w-4 text-destructive fill-destructive" />
-            using React & Tailwind CSS
+          <p className="text-muted-foreground">
+            © {currentYear} Aayush Angal. All rights reserved.
           </p>
         </motion.div>
       </div>

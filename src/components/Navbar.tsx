@@ -1,103 +1,80 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ThemeToggle } from './ThemeToggle';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import PillNav from './PillNav';
 
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('#');
+  const lastActiveSectionRef = useRef('#');
 
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const sections = ['about', 'projects', 'resume', 'certificates', 'contact'];
+          const scrollPosition = window.scrollY + 100;
+          let newActiveSection = '#';
+
+          for (const section of sections) {
+            const element = document.getElementById(section);
+            if (element) {
+              const offsetTop = element.offsetTop;
+              const offsetHeight = element.offsetHeight;
+              
+              if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                newActiveSection = `#${section}`;
+                break;
+              }
+            }
+          }
+          
+          if (window.scrollY < 100) {
+            newActiveSection = '#';
+          }
+          
+          // Only update state if the section actually changed
+          if (newActiveSection !== lastActiveSectionRef.current) {
+            lastActiveSectionRef.current = newActiveSection;
+            setActiveSection(newActiveSection);
+          }
+          
+          ticking = false;
+        });
+        
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const navItems = useMemo(() => [
     { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
-    { label: 'Resume', href: '#resume' },
+    { label: 'Education', href: '#resume' },
+    { label: 'Certificates', href: '#certificates' },
     { label: 'Contact', href: '#contact' },
-  ];
+  ], []);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: 'smooth' });
-    setIsOpen(false);
-  };
+  const scrollToSection = useCallback((href: string) => {
+    if (href === '#') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const element = document.querySelector(href);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'glass-card shadow-lg' : 'bg-transparent'
-      }`}
-    >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <motion.a
-            href="#"
-            className="text-2xl font-bold text-gradient"
-            whileHover={{ scale: 1.05 }}
-          >
-            AA
-          </motion.a>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <motion.button
-                key={item.label}
-                onClick={() => scrollToSection(item.href)}
-                className="text-foreground/80 hover:text-foreground transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {item.label}
-              </motion.button>
-            ))}
-            <ThemeToggle />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-4">
-            <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? <X /> : <Menu />}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="md:hidden glass-card"
-        >
-          <div className="px-4 pt-2 pb-4 space-y-2">
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => scrollToSection(item.href)}
-                className="block w-full text-left px-4 py-2 rounded-md hover:bg-accent transition-colors"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </motion.nav>
+    <PillNav
+      logo="/favicon.svg"
+      logoAlt="Aayush Angal"
+      items={navItems}
+      activeHref={activeSection}
+      onItemClick={scrollToSection}
+      ease="power2.easeOut"
+      className="theme-aware"
+    />
   );
 };

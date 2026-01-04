@@ -3,6 +3,52 @@ import { Card } from '@/components/ui/card';
 import { AnimatedSkillsChart } from './AnimatedSkillsChart';
 import { skillCategories } from '@/data/skills';
 import avatar from '@/assets/avatar.jpg';
+import LogoLoop from './LogoLoop';
+import { 
+  SiReact, 
+  SiTypescript, 
+  SiPython, 
+  SiTensorflow, 
+  SiPytorch, 
+  SiNextdotjs, 
+  SiTailwindcss, 
+  SiMongodb, 
+  SiNodedotjs, 
+  SiGit, 
+  SiDocker, 
+  SiJavascript,
+  SiHtml5,
+  SiCss3,
+  SiMysql,
+  SiPostgresql,
+  SiAmazon,
+  SiFigma,
+  SiOpenai,
+  SiArduino
+} from 'react-icons/si';
+
+const techLogos = [
+  { node: <SiPython />, title: "Python", href: "https://python.org" },
+  { node: <SiReact />, title: "React", href: "https://react.dev" },
+  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
+  { node: <SiTensorflow />, title: "TensorFlow", href: "https://tensorflow.org" },
+  { node: <SiPytorch />, title: "PyTorch", href: "https://pytorch.org" },
+  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiMongodb />, title: "MongoDB", href: "https://mongodb.com" },
+  { node: <SiNodedotjs />, title: "Node.js", href: "https://nodejs.org" },
+  { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
+  { node: <SiDocker />, title: "Docker", href: "https://docker.com" },
+  { node: <SiJavascript />, title: "JavaScript", href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+  { node: <SiHtml5 />, title: "HTML5", href: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+  { node: <SiCss3 />, title: "CSS3", href: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+  { node: <SiMysql />, title: "MySQL", href: "https://mysql.com" },
+  { node: <SiPostgresql />, title: "PostgreSQL", href: "https://postgresql.org" },
+  { node: <SiAmazon />, title: "AWS", href: "https://aws.amazon.com" },
+  { node: <SiFigma />, title: "Figma", href: "https://figma.com" },
+  { node: <SiOpenai />, title: "OpenAI", href: "https://openai.com" },
+  { node: <SiArduino />, title: "Arduino", href: "https://arduino.cc" },
+];
 
 export const About = () => {
   return (
@@ -40,7 +86,7 @@ export const About = () => {
               />
             </div>
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              I'm a Machine Learning Engineer and Full-Stack Developer with a passion for creating innovative solutions 
+              I'm a Machine Learning Engineer and Frontend Developer with a passion for creating innovative solutions 
               that bridge the gap between artificial intelligence and user-friendly applications.
             </p>
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
@@ -64,6 +110,31 @@ export const About = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="mb-16"
+        >
+          <h3 className="text-2xl font-bold text-center mb-8">
+            Technologies I <span className="text-gradient">Work With</span>
+          </h3>
+          <div className="relative overflow-hidden py-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/30">
+            <LogoLoop
+              logos={techLogos}
+              speed={60}
+              direction="left"
+              logoHeight={36}
+              gap={56}
+              hoverSpeed={15}
+              scaleOnHover
+              fadeOut
+              ariaLabel="Technologies and tools I use"
+            />
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >

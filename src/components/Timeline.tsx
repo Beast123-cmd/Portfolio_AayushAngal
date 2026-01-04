@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
-import { Briefcase, GraduationCap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Briefcase, GraduationCap, Download } from 'lucide-react';
 import { TimelineItem as TimelineItemType } from '@/data/experience';
 
 interface TimelineProps {
@@ -48,6 +49,22 @@ export const Timeline = ({ items }: TimelineProps) => {
                       </li>
                     ))}
                   </ul>
+                  {item.certificateUrl && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="mt-4"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = item.certificateUrl!;
+                        link.download = `${item.organization}_Certificate.pdf`;
+                        link.click();
+                      }}
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Download Certificate
+                    </Button>
+                  )}
                 </div>
               </div>
             </Card>
