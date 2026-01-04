@@ -9,7 +9,7 @@ const getTransporter = () => {
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
+        pass: process.env.EMAIL_PASS
       }
     });
   }
@@ -19,8 +19,8 @@ const getTransporter = () => {
 export const sendNotificationEmail = async (contact) => {
   try {
     // Skip if email credentials not configured
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-      console.log('📧 Email service not configured. Configure EMAIL_USER and EMAIL_PASSWORD in .env');
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.log('📧 Email service not configured. Configure EMAIL_USER and EMAIL_PASS in .env');
       return;
     }
 
@@ -49,7 +49,7 @@ export const sendNotificationEmail = async (contact) => {
 
 export const sendConfirmationEmail = async (email, name) => {
   try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.log('📧 Email credentials not configured for confirmation email');
       return;
     }
