@@ -27,9 +27,11 @@ router.post('/', async (req, res) => {
 
     await contact.save();
 
-    // Send emails (admin notification and user confirmation)
-    await sendNotificationEmail(contact);
-    await sendConfirmationEmail(contact.email, contact.name);
+    // Send emails in background (don't wait for them)
+    Promise.all([
+      sendNotificationEmail(contact),
+      sendConfirmationEmail(contact.email, contact.name)
+    ]).catch(err => console.error('Email sending error:', err));
 
     res.status(201).json({
       success: true,
