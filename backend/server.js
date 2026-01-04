@@ -14,16 +14,18 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:8080', 'http://localhost:8081', process.env.FRONTEND_URL].filter(Boolean),
-  credentials: true
-}));
+// CORS configuration
+const corsOptions = process.env.NODE_ENV === 'production' 
+  ? { origin: true, credentials: true } // Allow all origins in production
+  : { 
+      origin: ['http://localhost:5173', 'http://localhost:8080', 'http://localhost:8081'],
+      credentials: true 
+    };
 
-// Also allow all origins in production for flexibility
-if (process.env.NODE_ENV === 'production') {
-  app.use(cors());
-}
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
