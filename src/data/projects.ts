@@ -73,7 +73,7 @@ export const projects: Project[] = [
     tags: ['HTML', 'CSS', 'JavaScript', 'Flask', 'SQLite', 'Authentication'],
     category: 'web',
     github: 'https://github.com/Beast123-cmd/Library-Management-System',
-    demo: 'https://library-management-web-2tn0.onrender.com',
+    demo: 'https://library-management-system-3fu3.vercel.app/',
     featured: false,
   },
 ];
