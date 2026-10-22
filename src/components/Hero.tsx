@@ -1,21 +1,10 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, Download } from 'lucide-react';
 import TextType from './TextType';
-import { Suspense, lazy, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-
-// Lazy load Spline to reduce initial bundle size
-const Spline = lazy(() => import('@splinetool/react-spline'));
+import { HeroTerminal } from './HeroTerminal';
 
 export const Hero = () => {
-  const [showSpline, setShowSpline] = useState(false);
-  
-  // Delay loading Spline until after initial render for faster first paint
-  useEffect(() => {
-    const timer = setTimeout(() => setShowSpline(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
   const scrollToAbout = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -120,69 +109,14 @@ export const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right Side - 3D Model */}
+          {/* Interactive command line portfolio explorer */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative order-1 lg:order-2 h-[350px] sm:h-[400px] lg:h-[550px] xl:h-[600px] overflow-hidden"
+            className="relative order-1 lg:order-2 flex min-h-[350px] items-center sm:min-h-[400px] lg:min-h-[550px]"
           >
-            {/* Glow effect behind the model */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-primary/10 rounded-3xl blur-3xl" />
-            
-            {showSpline ? (
-              <Suspense fallback={
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-                    <span className="text-muted-foreground text-sm">Loading 3D Model...</span>
-                  </div>
-                </div>
-              }>
-                <Spline
-                  scene="https://prod.spline.design/j8QKnSumr15JHdFD/scene.splinecode"
-                  className="w-full h-full"
-                />
-              </Suspense>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-                  <span className="text-muted-foreground text-sm">Loading 3D Model...</span>
-                </div>
-              </div>
-            )}
-            
-            {/* Creative welcome overlay to cover watermark */}
-            <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
-              {/* Gradient fade */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/95 to-transparent h-32" />
-              
-              {/* Welcome message - positioned to the right */}
-              <div className="relative px-4 py-4 flex justify-end">
-                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-card/80 backdrop-blur-md border border-primary/20 shadow-lg shadow-primary/10">
-                  <span className="text-xl">👋</span>
-                  <div className="text-sm flex items-center gap-1">
-                    <span className="text-foreground font-medium">Hey there!</span>
-                    <TextType
-                      text={[
-                        " Welcome to my portfolio",
-                        " Feel free to explore!",
-                        " Let's build something amazing!",
-                        " Thanks for stopping by!"
-                      ]}
-                      typingSpeed={50}
-                      pauseDuration={3000}
-                      deletingSpeed={30}
-                      showCursor={true}
-                      cursorCharacter="_"
-                      loop={true}
-                      className="text-foreground font-medium"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <HeroTerminal />
           </motion.div>
         </div>
       </div>
