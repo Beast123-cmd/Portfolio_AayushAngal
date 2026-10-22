@@ -6,31 +6,31 @@ export interface Skill {
 
 export const skills: Skill[] = [
   { name: 'Python', level: 90, category: 'Programming' },
-  { name: 'Machine Learning', level: 85, category: 'AI/ML' },
-  { name: 'React', level: 80, category: 'Frontend' },
-  { name: 'C++', level: 75, category: 'Programming' },
-  { name: 'Data Science', level: 85, category: 'AI/ML' },
-  { name: 'SQL', level: 80, category: 'Database' },
-  { name: 'HTML/CSS', level: 75, category: 'Frontend' },
+  { name: 'C++', level: 80, category: 'Programming' },
+  { name: 'FastAPI', level: 85, category: 'Backend' },
+  { name: 'PostgreSQL', level: 80, category: 'Database' },
+  { name: 'AI Agents', level: 85, category: 'AI/ML' },
+  { name: 'RAG', level: 85, category: 'AI/ML' },
+  { name: 'LangGraph', level: 80, category: 'AI/ML' },
+  { name: 'React', level: 75, category: 'Frontend' },
   { name: 'Git/GitHub', level: 85, category: 'Tools' },
-  { name: 'JavaScript', level: 80, category: 'Frontend' },
 ];
 
 export const skillCategories = [
   {
     title: 'AI & Machine Learning',
-    items: ['Python', 'TensorFlow', 'PyTorch', 'Scikit-learn', 'NLP', 'Computer Vision'],
+    items: ['Python', 'LLMs', 'RAG', 'AI Agents', 'LangChain', 'LangGraph', 'Qdrant'],
   },
   {
-    title: 'Web Development',
-    items: ['React', 'TypeScript', 'HTML/CSS'],
+    title: 'Backend & APIs',
+    items: ['FastAPI', 'REST APIs', 'OData', 'WebSockets'],
   },
   {
-    title: 'Data Science',
-    items: ['Pandas', 'NumPy', 'Matplotlib', 'Seaborn', 'SQL', 'Data Analysis'],
+    title: 'Databases & Core CS',
+    items: ['PostgreSQL', 'SQL', 'Data Structures & Algorithms', 'OOP', 'DBMS'],
   },
   {
-    title: 'Tools & Version Control',
-    items: ['Git', 'GitHub', 'VS Code', 'Docker'],
+    title: 'Tools & Practices',
+    items: ['Git', 'GitHub', 'Azure DevOps', 'PyTest', 'Agile'],
   },
 ];

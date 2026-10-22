@@ -86,13 +86,12 @@ export const About = () => {
               />
             </div>
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              I'm a Machine Learning Engineer and Frontend Developer with a passion for creating innovative solutions 
-              that bridge the gap between artificial intelligence and user-friendly applications.
+              I'm an Electronics and Telecommunication undergraduate at PICT with industry experience in enterprise software,
+              backend development, and AI-driven workflows.
             </p>
             <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-              With expertise in Python, React, and hardware prototyping, I bring a multidisciplinary approach to 
-              problem-solving. From building AI-powered e-commerce agents to developing safety-critical hardware systems, 
-              I thrive on challenges that push the boundaries of technology.
+              At Prorigo, I work on AI agents and integrations for enterprise applications. My projects also explore clinical
+              assessment, research publication workflows, and explainable student-success analytics.
             </p>
           </motion.div>
 
