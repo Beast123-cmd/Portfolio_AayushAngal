@@ -1,7 +1,7 @@
 export const skillCategories = [
   {
-    title: 'AI & Machine Learning',
-    items: ['Python', 'LLMs', 'RAG', 'AI Agents', 'LangChain', 'LangGraph', 'Qdrant'],
+    title: 'Languages & AI',
+    items: ['C++', 'Python', 'LLMs', 'GenAI', 'RAG', 'AI Agents', 'LangChain', 'LangGraph'],
   },
   {
     title: 'Backend & APIs',
@@ -9,7 +9,7 @@ export const skillCategories = [
   },
   {
     title: 'Databases & Core CS',
-    items: ['PostgreSQL', 'SQL', 'Data Structures & Algorithms', 'OOP', 'DBMS'],
+    items: ['PostgreSQL', 'Neo4j', 'Qdrant', 'SQL', 'Data Structures & Algorithms', 'OOP', 'DBMS'],
   },
   {
     title: 'Tools & Practices',

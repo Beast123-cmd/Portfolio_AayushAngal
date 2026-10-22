@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Download } from 'lucide-react';
 import TextType from './TextType';
 import { Suspense, lazy, useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
 // Lazy load Spline to reduce initial bundle size
 const Spline = lazy(() => import('@splinetool/react-spline'));
@@ -96,8 +97,14 @@ export const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.0, duration: 0.6 }}
-              className="flex justify-center lg:justify-start"
+              className="flex flex-wrap justify-center gap-4 lg:justify-start"
             >
+              <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:shadow-glow" asChild>
+                <a href="/resume.pdf" download="Aayush_Angal_Resume.pdf" aria-label="Download Aayush Angal's current resume">
+                  <Download className="mr-2 h-4 w-4" />
+                  Download Resume
+                </a>
+              </Button>
               <button
                 onClick={scrollToAbout}
                 className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border/50 bg-card/50 backdrop-blur-sm text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
