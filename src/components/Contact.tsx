@@ -1,14 +1,15 @@
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ContactForm } from './ContactForm';
 
 export const Contact = () => {
   const socialLinks = [
-    { icon: Github, label: 'GitHub', href: 'https://github.com/Beast123-cmd' },
-    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/aayushangal' },
-    { icon: Mail, label: 'Kaggle', href: 'https://kaggle.com/aayushangal' },
+    { icon: Mail, label: 'angalaayush646@gmail.com', href: 'mailto:angalaayush646@gmail.com', external: false },
+    { icon: Phone, label: '+91 73878 90392', href: 'tel:+917387890392', external: false },
+    { icon: Github, label: 'GitHub', href: 'https://github.com/Beast123-cmd', external: true },
+    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/aayushangal', external: true },
   ];
 
   return (
@@ -51,8 +52,8 @@ export const Contact = () => {
             <div>
               <h3 className="text-2xl font-bold mb-4">Let's Connect</h3>
               <p className="text-muted-foreground mb-6">
-                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. 
-                Feel free to reach out through the form or connect with me on social media.
+                I’m open to conversations about AI/ML, backend engineering, and software opportunities. Reach me through the form,
+                or contact me directly by email or phone.
               </p>
             </div>
 
@@ -72,7 +73,11 @@ export const Contact = () => {
                     className="w-full justify-start border-primary hover:bg-primary hover:text-primary-foreground"
                     asChild
                   >
-                    <a href={link.href} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={link.href}
+                      target={link.external ? '_blank' : undefined}
+                      rel={link.external ? 'noopener noreferrer' : undefined}
+                    >
                       <link.icon className="mr-3 h-5 w-5" />
                       {link.label}
                     </a>

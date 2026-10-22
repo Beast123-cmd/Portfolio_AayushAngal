@@ -52,8 +52,8 @@ export const Navbar = () => {
   const navItems = useMemo(() => [
     { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
-    { label: 'Education', href: '#resume' },
-    { label: 'Certificates', href: '#certificates' },
+    { label: 'Experience', href: '#resume' },
+    { label: 'Awards', href: '#certificates' },
     { label: 'Contact', href: '#contact' },
   ], []);
 

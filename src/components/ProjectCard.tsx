@@ -16,6 +16,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       'project-seekr': new URL('@/assets/project-seekr.jpg', import.meta.url).href,
       'project-meds-ai': new URL('@/assets/project-meds-ai.jpg', import.meta.url).href,
       'project-chatpdf': new URL('@/assets/project-chatpdf.jpg', import.meta.url).href,
+      'project-kaggle': new URL('@/assets/project-kaggle.jpg', import.meta.url).href,
       'project-globetrotter': new URL('@/assets/project-globetrotter.jpg', import.meta.url).href,
       'project-arduino': new URL('@/assets/project-arduino.jpg', import.meta.url).href,
       'project-library': new URL('@/assets/project-library.jpg', import.meta.url).href,
@@ -51,24 +52,6 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
               whileHover={{ scale: 1.1 }}
               transition={{ duration: 0.3 }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-              <div className="flex gap-2">
-                {project.github && (
-                  <Button size="sm" variant="secondary" asChild>
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="h-4 w-4" />
-                    </a>
-                  </Button>
-                )}
-                {project.demo && (
-                  <Button size="sm" variant="secondary" asChild>
-                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </Button>
-                )}
-              </div>
-            </div>
           </div>
           <div className="p-6">
             <h3 className="text-2xl font-bold mb-2 text-foreground">{project.title}</h3>
@@ -80,6 +63,26 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
                 </Badge>
               ))}
             </div>
+            {(project.github || project.demo) && (
+              <div className="flex flex-wrap gap-3 mt-6">
+                {project.github && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={project.github} target="_blank" rel="noopener noreferrer">
+                      <Github className="mr-2 h-4 w-4" />
+                      Source code
+                    </a>
+                  </Button>
+                )}
+                {project.demo && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      Live demo
+                    </a>
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </ElectricBorder>

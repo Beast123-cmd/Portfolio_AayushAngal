@@ -25,7 +25,7 @@ export const Projects = () => {
             Featured <span className="text-gradient">Projects</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Explore my portfolio of machine learning, web development, and hardware projects
+            A selection of AI systems, research tools, and full-stack products I've built
           </p>
         </motion.div>
 

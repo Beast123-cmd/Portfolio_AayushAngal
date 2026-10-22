@@ -11,11 +11,18 @@ export const Footer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center"
+          className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left"
         >
-          <p className="text-muted-foreground">
-            © {currentYear} Aayush Angal. All rights reserved.
-          </p>
+          <div>
+            <p className="font-medium text-foreground">Aayush Angal</p>
+            <p className="text-sm text-muted-foreground">AI/ML Intern at Prorigo · PICT ’27</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-5 text-sm text-muted-foreground">
+            <a className="hover:text-primary transition-colors" href="mailto:angalaayush646@gmail.com">Email</a>
+            <a className="hover:text-primary transition-colors" href="https://linkedin.com/in/aayushangal" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a className="hover:text-primary transition-colors" href="/resume.pdf" download="Aayush_Angal_Resume.pdf">Resume</a>
+          </div>
+          <p className="text-sm text-muted-foreground">© {currentYear} Aayush Angal</p>
         </motion.div>
       </div>
     </footer>

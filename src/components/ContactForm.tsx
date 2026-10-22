@@ -18,6 +18,7 @@ const contactSchema = z.object({
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
+const apiBaseUrl = (import.meta.env.VITE_API_URL || 'https://portfolio-aayushangal.onrender.com').replace(/\/$/, '');
 
 export const ContactForm = () => {
   const { toast } = useToast();
@@ -37,7 +38,7 @@ export const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/contact`, {
+      const response = await fetch(`${apiBaseUrl}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,12 +62,12 @@ export const ContactForm = () => {
         setShowSuccess(false);
       }, 4000);
       
-    } catch (error) {
+    } catch {
       console.error('Contact form error:', error);
       setIsSubmitting(false);
       toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to send message. Please try again.',
+        title: "Couldn't send your message",
+        description: 'Please email me directly at angalaayush646@gmail.com.',
         variant: 'destructive',
       });
     }

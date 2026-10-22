@@ -1,53 +1,34 @@
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
-import { AnimatedSkillsChart } from './AnimatedSkillsChart';
+import { FocusAreas } from './FocusAreas';
 import { skillCategories } from '@/data/skills';
 import avatar from '@/assets/avatar.jpg';
 import LogoLoop from './LogoLoop';
-import { 
-  SiReact, 
-  SiTypescript, 
-  SiPython, 
-  SiTensorflow, 
-  SiPytorch, 
-  SiNextdotjs, 
-  SiTailwindcss, 
-  SiMongodb, 
-  SiNodedotjs, 
-  SiGit, 
-  SiDocker, 
-  SiJavascript,
-  SiHtml5,
-  SiCss3,
-  SiMysql,
+import {
+  SiCplusplus,
+  SiFastapi,
+  SiGithub,
+  SiLangchain,
+  SiNextdotjs,
   SiPostgresql,
-  SiAmazon,
-  SiFigma,
-  SiOpenai,
-  SiArduino
+  SiPython,
+  SiReact,
 } from 'react-icons/si';
 
 const techLogos = [
   { node: <SiPython />, title: "Python", href: "https://python.org" },
-  { node: <SiReact />, title: "React", href: "https://react.dev" },
-  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
-  { node: <SiTensorflow />, title: "TensorFlow", href: "https://tensorflow.org" },
-  { node: <SiPytorch />, title: "PyTorch", href: "https://pytorch.org" },
-  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
-  { node: <SiMongodb />, title: "MongoDB", href: "https://mongodb.com" },
-  { node: <SiNodedotjs />, title: "Node.js", href: "https://nodejs.org" },
-  { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
-  { node: <SiDocker />, title: "Docker", href: "https://docker.com" },
-  { node: <SiJavascript />, title: "JavaScript", href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
-  { node: <SiHtml5 />, title: "HTML5", href: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
-  { node: <SiCss3 />, title: "CSS3", href: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
-  { node: <SiMysql />, title: "MySQL", href: "https://mysql.com" },
+  { node: <SiCplusplus />, title: "C++", href: "https://isocpp.org" },
+  { node: <SiFastapi />, title: "FastAPI", href: "https://fastapi.tiangolo.com" },
   { node: <SiPostgresql />, title: "PostgreSQL", href: "https://postgresql.org" },
-  { node: <SiAmazon />, title: "AWS", href: "https://aws.amazon.com" },
-  { node: <SiFigma />, title: "Figma", href: "https://figma.com" },
-  { node: <SiOpenai />, title: "OpenAI", href: "https://openai.com" },
-  { node: <SiArduino />, title: "Arduino", href: "https://arduino.cc" },
+  { node: <span className="text-lg font-semibold">Qdrant</span>, title: "Qdrant", href: "https://qdrant.tech" },
+  { node: <SiLangchain />, title: "LangChain", href: "https://langchain.com" },
+  { node: <span className="text-lg font-semibold">LangGraph</span>, title: "LangGraph", href: "https://langchain-ai.github.io/langgraph/" },
+  { node: <SiReact />, title: "React", href: "https://react.dev" },
+  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
+  { node: <SiGithub />, title: "GitHub", href: "https://github.com" },
+  { node: <span className="text-lg font-semibold">Azure DevOps</span>, title: "Azure DevOps", href: "https://azure.microsoft.com/products/devops" },
+  { node: <span className="text-lg font-semibold">PyTest</span>, title: "PyTest", href: "https://pytest.org" },
+  { node: <span className="text-lg font-semibold">OData</span>, title: "OData", href: "https://www.odata.org" },
 ];
 
 export const About = () => {
@@ -65,7 +46,7 @@ export const About = () => {
             About <span className="text-gradient">Me</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Passionate about building intelligent systems and elegant web experiences
+            I build context-aware AI tools and backend systems for real-world workflows.
           </p>
         </motion.div>
 
@@ -101,7 +82,7 @@ export const About = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <AnimatedSkillsChart />
+            <FocusAreas />
           </motion.div>
         </div>
 

@@ -76,9 +76,9 @@ export const Hero = () => {
               transition={{ delay: 0.5, duration: 0.6 }}
               className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-6"
             >
-              <span className="font-medium">AI/ML Engineer</span>
+              <span className="font-medium">AI/ML Intern</span>
               <span className="text-primary mx-2">•</span>
-              <span className="font-medium">Software Developer</span>
+              <span className="font-medium">Backend & AI Systems</span>
             </motion.div>
 
             <motion.p
@@ -87,8 +87,8 @@ export const Hero = () => {
               transition={{ delay: 0.7, duration: 0.6 }}
               className="text-base sm:text-lg text-muted-foreground/80 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed"
             >
-              PICT undergraduate with industry experience in enterprise software, backend development, and AI-driven workflows. 
-              I build reliable systems that connect language-model capabilities with real application data and operations.
+              PICT Electronics and Telecommunication undergraduate and AI/ML Intern at Prorigo. I build enterprise AI workflows,
+              backend integrations, and data-driven products with a focus on reliable, explainable software.
             </motion.p>
 
             {/* Scroll indicator */}
