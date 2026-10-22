@@ -1,5 +1,5 @@
-export const validateContactForm = ({ name, email, message }) => {
-  if (!name || name.trim().length === 0) {
+export const validateContactForm = ({ name, email, message } = {}) => {
+  if (typeof name !== 'string' || name.trim().length === 0) {
     return { valid: false, error: 'Name is required' };
   }
 
@@ -7,7 +7,7 @@ export const validateContactForm = ({ name, email, message }) => {
     return { valid: false, error: 'Name must be less than 100 characters' };
   }
 
-  if (!email || email.trim().length === 0) {
+  if (typeof email !== 'string' || email.trim().length === 0) {
     return { valid: false, error: 'Email is required' };
   }
 
@@ -20,7 +20,7 @@ export const validateContactForm = ({ name, email, message }) => {
     return { valid: false, error: 'Email must be less than 255 characters' };
   }
 
-  if (!message || message.trim().length === 0) {
+  if (typeof message !== 'string' || message.trim().length === 0) {
     return { valid: false, error: 'Message is required' };
   }
 

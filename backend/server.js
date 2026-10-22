@@ -2,33 +2,29 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 import contactRoutes from './routes/contact.js';
 import resumeRoutes from './routes/resume.js';
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const app = express();
 
-// CORS configuration
-const corsOptions = process.env.NODE_ENV === 'production' 
-  ? { origin: true, credentials: true } // Allow all origins in production
-  : { 
-      origin: ['http://localhost:5173', 'http://localhost:8080', 'http://localhost:8081'],
-      credentials: true 
-    };
+// Only allow the portfolio frontend to call the public contact endpoint.
+const productionOrigins = [
+  'https://aayush-portfolio-svud.onrender.com',
+  ...(process.env.FRONTEND_URL || '').split(',').map((origin) => origin.trim().replace(/\/+$/, '')).filter((origin) => origin.startsWith('https://')),
+];
+const corsOptions = process.env.NODE_ENV === 'production'
+  ? { origin: [...new Set(productionOrigins)] }
+  : { origin: ['http://localhost:5173', 'http://localhost:8080', 'http://localhost:8081'] };
 
 app.use(cors(corsOptions));
 
 // Handle preflight requests
 app.options('*', cors(corsOptions));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio';
@@ -43,7 +39,11 @@ app.use('/api/resume', resumeRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Backend is running' });
+  const databaseReady = mongoose.connection.readyState === 1;
+  res.status(databaseReady ? 200 : 503).json({
+    status: databaseReady ? 'OK' : 'degraded',
+    database: databaseReady ? 'connected' : 'unavailable',
+  });
 });
 
 // Error handling middleware

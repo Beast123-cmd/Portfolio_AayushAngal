@@ -25,7 +25,6 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           vendor: ['react', 'react-dom'],
           animations: ['framer-motion', 'gsap'],
-          spline: ['@splinetool/react-spline', '@splinetool/runtime'],
         },
       },
     },

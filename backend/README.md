@@ -42,10 +42,6 @@ The backend will run on `http://localhost:3001`
 
 ### Contact Form
 - **POST** `/api/contact` - Submit a new contact form
-- **GET** `/api/contact` - Get all contacts
-- **GET** `/api/contact/:id` - Get a specific contact
-- **PATCH** `/api/contact/:id` - Update contact status
-- **DELETE** `/api/contact/:id` - Delete a contact
 
 ### Resume
 - **GET** `/api/resume/download` - Download resume PDF

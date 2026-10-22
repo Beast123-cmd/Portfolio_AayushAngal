@@ -15,7 +15,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
     const images: Record<string, string> = {
       'project-seekr': new URL('@/assets/project-seekr.jpg', import.meta.url).href,
       'project-meds-ai': new URL('@/assets/project-meds-ai.jpg', import.meta.url).href,
-      'project-researchsync': new URL('@/assets/project-spotify.jpg', import.meta.url).href,
+      'project-researchsync': new URL('@/assets/project-publications.jpg', import.meta.url).href,
       'project-kaggle': new URL('@/assets/project-kaggle.jpg', import.meta.url).href,
       'project-globetrotter': new URL('@/assets/project-globetrotter.jpg', import.meta.url).href,
       'project-arduino': new URL('@/assets/project-arduino.jpg', import.meta.url).href,

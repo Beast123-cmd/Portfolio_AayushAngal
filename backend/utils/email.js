@@ -1,5 +1,13 @@
 import nodemailer from 'nodemailer';
 
+const escapeHtml = (value) => value.replace(/[&<>"']/g, (character) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+})[character]);
+
 // Create transporter lazily to ensure env vars are loaded
 let transporter = null;
 
@@ -21,29 +29,31 @@ export const sendNotificationEmail = async (contact) => {
     // Skip if email credentials not configured
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.log('📧 Email service not configured. Configure EMAIL_USER and EMAIL_PASS in .env');
-      return;
+      return false;
     }
 
     // Send email to yourself (admin)
     await getTransporter().sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
-      subject: `New Portfolio Contact: ${contact.name}`,
+      subject: 'New Portfolio Contact',
       html: `
         <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${contact.name}</p>
-        <p><strong>Email:</strong> ${contact.email}</p>
+        <p><strong>Name:</strong> ${escapeHtml(contact.name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(contact.email)}</p>
         <p><strong>Message:</strong></p>
-        <p>${contact.message.replace(/\n/g, '<br>')}</p>
+        <p>${escapeHtml(contact.message).replace(/\n/g, '<br>')}</p>
         <hr>
         <small>Submitted on: ${new Date(contact.createdAt).toLocaleString()}</small>
       `
     });
 
     console.log('✅ Notification email sent to admin');
+    return true;
   } catch (error) {
     console.error('⚠️ Failed to send email:', error.message);
     // Don't throw - let the contact still be saved even if email fails
+    return false;
   }
 };
 
@@ -51,7 +61,7 @@ export const sendConfirmationEmail = async (email, name) => {
   try {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.log('📧 Email credentials not configured for confirmation email');
-      return;
+      return false;
     }
 
     await getTransporter().sendMail({
@@ -60,7 +70,7 @@ export const sendConfirmationEmail = async (email, name) => {
       subject: 'Thank you for reaching out!',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #333;">Hello ${name},</h2>
+          <h2 style="color: #333;">Hello ${escapeHtml(name)},</h2>
           
           <p style="color: #555; line-height: 1.6;">
             Thank you for reaching out and for your interest in my profile. I truly appreciate you taking the time to connect.
@@ -96,7 +106,9 @@ export const sendConfirmationEmail = async (email, name) => {
     });
 
     console.log('✅ Confirmation email sent to user:', email);
+    return true;
   } catch (error) {
     console.error('⚠️ Failed to send confirmation email:', error.message);
+    return false;
   }
 };

@@ -12,7 +12,7 @@ export const Timeline = ({ items }: TimelineProps) => {
   return (
     <div className="relative">
       {/* Timeline Line */}
-      <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-0.5 bg-border" />
+      <div className="absolute left-3 h-full w-0.5 bg-border md:left-1/2 md:-translate-x-1/2" />
 
       {items.map((item, index) => (
         <motion.div
@@ -21,12 +21,10 @@ export const Timeline = ({ items }: TimelineProps) => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
           viewport={{ once: true }}
-          className={`relative mb-12 ${
-            index % 2 === 0 ? 'md:pr-1/2' : 'md:pl-1/2 md:ml-auto'
-          }`}
+          className="relative mb-12 w-full"
         >
-          <div className="flex items-center">
-            <Card className={`glass-card p-6 hover-lift ${index % 2 === 0 ? 'md:mr-8' : 'md:ml-8'} w-full md:w-5/12`}>
+          <div>
+            <Card className={`glass-card ml-9 w-[calc(100%-2.25rem)] p-6 hover-lift md:ml-0 md:w-[calc(50%-2rem)] ${index % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'}`}>
               <div className="flex items-start gap-4 text-left">
                 <div className="shrink-0 rounded-lg bg-primary/10 p-3">
                   {item.type === 'education' ? (
@@ -70,7 +68,7 @@ export const Timeline = ({ items }: TimelineProps) => {
             </Card>
 
             {/* Timeline Dot */}
-            <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-background" />
+            <div className="absolute left-1 top-6 h-4 w-4 rounded-full border-4 border-background bg-primary md:left-1/2 md:-translate-x-1/2" />
           </div>
         </motion.div>
       ))}

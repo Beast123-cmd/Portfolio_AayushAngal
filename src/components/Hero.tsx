@@ -1,11 +1,9 @@
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Download } from 'lucide-react';
-import { Suspense, lazy } from 'react';
 import TextType from './TextType';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-
-const Spline = lazy(() => import('@splinetool/react-spline'));
+import robot from '@/assets/portfolio-robot.webp';
 
 export const Hero = () => {
   const navigate = useNavigate();
@@ -110,24 +108,25 @@ export const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Original interactive robot visual */}
+          {/* Robot visual */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
             className="relative order-1 lg:order-2 h-[350px] overflow-hidden sm:h-[400px] lg:h-[550px] xl:h-[600px]"
           >
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-primary/20 to-primary/10 blur-3xl" />
-            <Suspense fallback={
-              <div className="relative flex h-full w-full items-center justify-center" aria-label="Loading robot illustration">
-                <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary/30 border-t-primary" />
-              </div>
-            }>
-              <Spline
-                scene="https://prod.spline.design/j8QKnSumr15JHdFD/scene.splinecode"
-                className="relative h-full w-full"
-              />
-            </Suspense>
+            <div className="absolute inset-8 rounded-full bg-primary/10 blur-3xl" />
+            <motion.img
+              src={robot}
+              alt="A friendly black robot waving hello"
+              width={1140}
+              height={1380}
+              loading="eager"
+              decoding="async"
+              className="relative h-full w-full object-contain drop-shadow-2xl"
+              whileHover={{ y: -6, rotate: -1 }}
+              transition={{ duration: 0.3 }}
+            />
           </motion.div>
         </div>
       </div>

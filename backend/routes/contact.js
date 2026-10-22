@@ -8,12 +8,31 @@ const router = express.Router();
 // POST: Submit contact form
 router.post('/', async (req, res) => {
   try {
-    const { name, email, message } = req.body;
+    const { name, email, message } = req.body ?? {};
 
     // Validate input
     const validation = validateContactForm({ name, email, message });
     if (!validation.valid) {
       return res.status(400).json({ error: validation.error });
+    }
+
+    if (Contact.db.readyState !== 1) {
+      const fallbackContact = {
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
+        createdAt: new Date(),
+      };
+      const emailDelivered = await sendNotificationEmail(fallbackContact);
+      if (!emailDelivered) {
+        return res.status(503).json({ error: 'Contact form is temporarily unavailable. Please email me directly.' });
+      }
+
+      void sendConfirmationEmail(fallbackContact.email, fallbackContact.name);
+      return res.status(201).json({
+        success: true,
+        message: 'Your message was sent by email. Thank you!',
+      });
     }
 
     // Create new contact document
@@ -41,73 +60,6 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Contact form error:', error);
     res.status(500).json({ error: 'Failed to save contact information' });
-  }
-});
-
-// GET: Fetch all contacts (admin only)
-router.get('/', async (req, res) => {
-  try {
-    const contacts = await Contact.find().sort({ createdAt: -1 });
-    res.json(contacts);
-  } catch (error) {
-    console.error('Error fetching contacts:', error);
-    res.status(500).json({ error: 'Failed to fetch contacts' });
-  }
-});
-
-// GET: Single contact by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const contact = await Contact.findById(req.params.id);
-    if (!contact) {
-      return res.status(404).json({ error: 'Contact not found' });
-    }
-    res.json(contact);
-  } catch (error) {
-    console.error('Error fetching contact:', error);
-    res.status(500).json({ error: 'Failed to fetch contact' });
-  }
-});
-
-// PATCH: Update contact status
-router.patch('/:id', async (req, res) => {
-  try {
-    const { status } = req.body;
-    
-    if (!['new', 'read', 'replied'].includes(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
-    }
-
-    const contact = await Contact.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
-
-    if (!contact) {
-      return res.status(404).json({ error: 'Contact not found' });
-    }
-
-    res.json(contact);
-  } catch (error) {
-    console.error('Error updating contact:', error);
-    res.status(500).json({ error: 'Failed to update contact' });
-  }
-});
-
-// DELETE: Delete contact
-router.delete('/:id', async (req, res) => {
-  try {
-    const contact = await Contact.findByIdAndDelete(req.params.id);
-    
-    if (!contact) {
-      return res.status(404).json({ error: 'Contact not found' });
-    }
-
-    res.json({ message: 'Contact deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting contact:', error);
-    res.status(500).json({ error: 'Failed to delete contact' });
   }
 });
 

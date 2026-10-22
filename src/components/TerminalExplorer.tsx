@@ -1,5 +1,5 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ChevronRight, X } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ChevronRight, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '@/data/projects';
 import { timeline } from '@/data/experience';
@@ -20,6 +20,7 @@ const folderFiles: Record<string, string[]> = {
 const completionCommands = ['help', 'ls', 'tree', 'pwd', 'whoami', 'skills', 'resume', 'history', 'clear', 'exit', 'cd ..', 'search '];
 
 const pathFor = (directory: string) => directory ? `~/${directory}` : '~';
+const normalizePath = (value: string) => value.replace(/^~\/?/, '').replace(/^\/+/, '').replace(/\/+$/, '');
 
 const findProject = (raw: string) => {
   const normalizedRaw = raw.toLowerCase().replace(/^~?\/?projects\//, '');
@@ -79,8 +80,9 @@ export const TerminalExplorer = () => {
     } else if (normalized === 'pwd') {
       result.text = `/home/aayush${directory ? `/${directory}` : ''}`;
     } else if (['ls', 'dir'].includes(normalized) || normalized.startsWith('ls ')) {
-      const requestedFolder = normalized.split(' ')[1]?.replace(/^~\/?/, '').replace(/^\//, '').replace(/\/$/, '').replace(/^projects\//, '');
-      const listedDirectory = requestedFolder || directory;
+      const pathArgument = normalized.slice(2).trim();
+      const requestedFolder = normalizePath(pathArgument);
+      const listedDirectory = pathArgument ? requestedFolder : directory;
       result.text = listedDirectory === 'projects'
         ? folderFiles.projects.join('\n')
         : listedDirectory
@@ -92,7 +94,7 @@ export const TerminalExplorer = () => {
       const historyWithCurrent = [...history, command];
       result.text = historyWithCurrent.map((item, index) => `${String(index + 1).padStart(2, ' ')}  ${item}`).join('\n');
     } else if (normalized === 'cd' || normalized.startsWith('cd ')) {
-      const destination = normalized.replace(/^cd\s*/, '').replace(/^~\/?/, '').replace(/^\//, '');
+      const destination = normalizePath(normalized.replace(/^cd\s*/, ''));
       const nextDirectory = ['', '.', '..'].includes(destination)
         ? ''
         : destination.startsWith('../')
@@ -137,6 +139,11 @@ export const TerminalExplorer = () => {
           : 'Experience details are not available.';
       } else if (file === 'transcript.txt' || (file === 'readme.md' && fileDirectory === 'education')) {
         result.text = timeline.filter((item) => item.type === 'education').map((item) => `${item.title}\n${item.organization} · ${item.location}\n${item.period}\n${item.description.join(' · ')}`).join('\n\n');
+      } else if (file === 'skills.txt') {
+        result.text = skillCategories.map((category) => `${category.title}: ${category.items.join(', ')}`).join('\n');
+      } else if (file === 'resume.pdf') {
+        result.text = 'Current resume —';
+        result.links = [{ label: 'Download Aayush_Angal_Resume.pdf', href: '/resume.pdf', download: true }];
       } else if (file === 'certificates.txt' || file === 'achievements.txt') {
         result.text = 'Certificates: Machine Learning Course (2024), Python: From Scratch to Advanced (95%).\nAchievements: HacXLerate AI/Tech Competition — 1st Runner-Up; Odoo Hackathon — Finalist; Ignisia AI Hackathon — Finalist.';
       } else if (file === 'links.txt' || (file === 'readme.md' && fileDirectory === 'contact')) {
@@ -152,7 +159,8 @@ export const TerminalExplorer = () => {
         result.text = `cat: ${file}: file not found\nUse ls to list the current folder.`;
       }
     } else if (normalized.startsWith('open ')) {
-      const destination = normalized.slice(5).replace(/^~\/?projects\//, '').replace(/^projects\//, '').replace(/\/$/, '');
+      const cleanedDestination = normalizePath(normalized.slice(5));
+      const destination = cleanedDestination.replace(/^projects\//, '');
       if (folders.includes(destination)) {
         setDirectory(destination);
         result.text = `${destination}/\n\n${folderFiles[destination].join('   ')}`;
@@ -229,7 +237,7 @@ export const TerminalExplorer = () => {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#0b1220] px-3 py-6 text-slate-100 sm:px-6">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
-      <section aria-label="Interactive portfolio terminal" className="relative flex h-[min(760px,calc(100svh-3rem))] min-h-[500px] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-primary/25 bg-[#0b1220]/95 shadow-2xl shadow-primary/10 backdrop-blur-xl">
+      <section aria-label="Interactive portfolio terminal" className="relative flex h-[min(760px,calc(100svh-3rem))] min-h-[min(500px,calc(100svh-3rem))] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-primary/25 bg-[#0b1220]/95 shadow-2xl shadow-primary/10 backdrop-blur-xl">
         <header className="flex shrink-0 items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3 sm:px-5">
           <div className="flex items-center gap-2">
             <button onClick={() => navigate('/')} aria-label="Return to portfolio" title="Return to portfolio" className="h-2.5 w-2.5 rounded-full bg-[#ff6b6b] transition-opacity hover:opacity-70" />

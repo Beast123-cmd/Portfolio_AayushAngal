@@ -53,7 +53,6 @@ export const ContactForm = () => {
 
       await response.json();
       
-      setIsSubmitting(false);
       setShowSuccess(true);
       form.reset();
       
@@ -62,14 +61,15 @@ export const ContactForm = () => {
         setShowSuccess(false);
       }, 4000);
       
-    } catch {
+    } catch (error) {
       console.error('Contact form error:', error);
-      setIsSubmitting(false);
       toast({
         title: "Couldn't send your message",
         description: 'Please email me directly at angalaayush646@gmail.com.',
         variant: 'destructive',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
