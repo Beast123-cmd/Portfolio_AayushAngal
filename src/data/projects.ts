@@ -56,16 +56,6 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    id: 'chatpdf',
-    title: 'ChatPDF — AI Document Intelligence System',
-    description: 'An AI-based document understanding platform that lets users upload PDFs and ask questions in natural language. It combines text extraction, semantic search, and contextual response generation for research, study, and business use cases.',
-    image: 'project-chatpdf',
-    tags: ['Python', 'LLMs', 'RAG', 'Vector Database', 'NLP', 'Streamlit'],
-    category: 'ai',
-    github: 'https://github.com/ruchir07/chatpdf',
-    featured: false,
-  },
-  {
     id: 'library-management',
     title: 'Library Management System',
     description: 'A full-stack library application with role-based authentication, book availability tracking, and transaction management. Password hashing and database operations support secure, reliable use by multiple users.',
