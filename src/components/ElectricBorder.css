@@ -25,6 +25,10 @@
   z-index: 1;
 }
 
+.project-electric-card > .eb-content {
+  height: 100%;
+}
+
 .eb-layers {
   position: absolute;
   inset: 0;

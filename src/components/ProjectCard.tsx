@@ -30,6 +30,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
 
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -41,9 +42,9 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         chaos={0.15}
         thickness={1.5}
         borderRadius={16}
-        className="project-electric-card"
+        className="project-electric-card h-full"
       >
-        <div className="bg-card rounded-2xl overflow-hidden group">
+        <div className="bg-card rounded-2xl overflow-hidden group flex h-full flex-col">
           <div className="relative overflow-hidden h-48">
             <motion.img
               src={getImageSrc(project.image)}
@@ -53,9 +54,9 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
               transition={{ duration: 0.3 }}
             />
           </div>
-          <div className="p-6">
-            <h3 className="text-2xl font-bold mb-2 text-foreground">{project.title}</h3>
-            <p className="text-muted-foreground mb-4">{project.description}</p>
+          <div className="p-6 flex flex-1 flex-col">
+            <h3 className="text-2xl font-bold mb-2 min-h-[3.5rem] text-foreground">{project.title}</h3>
+            <p className="text-muted-foreground mb-4 min-h-[4.5rem] line-clamp-3">{project.description}</p>
             <div className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
                 <Badge key={tag} variant="outline" className="border-primary/30 text-primary">
@@ -64,7 +65,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
               ))}
             </div>
             {(project.github || project.demo) && (
-              <div className="flex flex-wrap gap-3 mt-6">
+              <div className="flex flex-wrap gap-3 mt-auto pt-6">
                 {project.github && (
                   <Button size="sm" variant="outline" asChild>
                     <a href={project.github} target="_blank" rel="noopener noreferrer">

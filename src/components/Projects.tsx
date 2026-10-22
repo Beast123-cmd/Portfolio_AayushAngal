@@ -31,7 +31,7 @@ export const Projects = () => {
 
         <ProjectFilter activeFilter={activeFilter} onFilterChange={setActiveFilter} />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="grid auto-rows-fr items-stretch gap-8 md:grid-cols-2 lg:grid-cols-2">
           {filteredProjects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
