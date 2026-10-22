@@ -17,13 +17,20 @@ const folderFiles: Record<string, string[]> = {
   awards: ['certificates.txt', 'achievements.txt'],
   contact: ['README.md', 'links.txt'],
 };
-const completionCommands = ['help', 'ls', 'pwd', 'whoami', 'skills', 'resume', 'history', 'clear', 'exit', 'cd ..'];
+const completionCommands = ['help', 'ls', 'tree', 'pwd', 'whoami', 'skills', 'resume', 'history', 'clear', 'exit', 'cd ..', 'search '];
 
 const pathFor = (directory: string) => directory ? `~/${directory}` : '~';
 
 const findProject = (raw: string) => {
-  const query = raw.toLowerCase().replace(/\.md$/, '').replace(/[-_]/g, ' ').trim();
-  return projects.find((project) => project.id === query.replace(/\s+/g, '-') || project.title.toLowerCase().includes(query));
+  const normalizedRaw = raw.toLowerCase().replace(/^~?\/?projects\//, '');
+  const query = normalizedRaw.replace(/\.md$/, '').replace(/[-_]/g, ' ').trim();
+  if (!query) return undefined;
+  const slug = query.replace(/\s+/g, '-');
+  return projects.find((project) =>
+    project.id === slug ||
+    project.github?.split('/').pop()?.replace(/\.git$/, '').toLowerCase() === slug ||
+    project.title.toLowerCase().includes(query),
+  );
 };
 
 const getProjectLinks = (project: (typeof projects)[number]): TerminalLink[] => {
@@ -68,16 +75,29 @@ export const TerminalExplorer = () => {
     }
 
     if (['help', '?'].includes(normalized)) {
-      result.text = 'Portfolio commands (read-only):\n  ls                         list folders or files\n  cd <folder>                enter a folder\n  cd ..                      return to the home directory\n  cat <file>                 read a portfolio file\n  open <project>             view a project and its links\n  pwd · whoami · skills · resume · history · clear · exit\nFolders: about/ projects/ experience/ education/ awards/ contact/';
+      result.text = 'Portfolio commands (read-only):\n  ls [folder]                list folders or files\n  tree                       show the folder map\n  cd <folder>                enter a folder\n  cd ..                      return to the home directory\n  cat <file>                 read a portfolio file\n  open <project>             view a project and its links\n  search <term>              find projects by name, stack, or description\n  pwd · whoami · skills · resume · history · clear · exit\nFolders: about/ projects/ experience/ education/ awards/ contact/';
     } else if (normalized === 'pwd') {
       result.text = `/home/aayush${directory ? `/${directory}` : ''}`;
-    } else if (['ls', 'dir'].includes(normalized)) {
-      result.text = directory ? folderFiles[directory].join('   ') : `${folders.join('/   ')}/   resume.pdf`;
+    } else if (['ls', 'dir'].includes(normalized) || normalized.startsWith('ls ')) {
+      const requestedFolder = normalized.split(' ')[1]?.replace(/^~\/?/, '').replace(/^\//, '').replace(/\/$/, '').replace(/^projects\//, '');
+      const listedDirectory = requestedFolder || directory;
+      result.text = listedDirectory === 'projects'
+        ? folderFiles.projects.join('\n')
+        : listedDirectory
+        ? folderFiles[listedDirectory]?.join('   ') ?? `ls: cannot access '${listedDirectory}': no such directory`
+        : `${folders.join('/   ')}/   resume.pdf`;
+    } else if (normalized === 'tree') {
+      result.text = `~\n${folders.map((folder) => `├── ${folder}/\n│   ├── ${folderFiles[folder].join('\n│   ├── ')}`).join('\n')}\n└── resume.pdf`;
     } else if (normalized === 'history') {
-      result.text = history.length ? history.map((item, index) => `${String(index + 1).padStart(2, ' ')}  ${item}`).join('\n') : 'No commands entered yet.';
+      const historyWithCurrent = [...history, command];
+      result.text = historyWithCurrent.map((item, index) => `${String(index + 1).padStart(2, ' ')}  ${item}`).join('\n');
     } else if (normalized === 'cd' || normalized.startsWith('cd ')) {
       const destination = normalized.replace(/^cd\s*/, '').replace(/^~\/?/, '').replace(/^\//, '');
-      const nextDirectory = ['', '.', '..'].includes(destination) ? '' : destination.replace(/\/$/, '');
+      const nextDirectory = ['', '.', '..'].includes(destination)
+        ? ''
+        : destination.startsWith('../')
+          ? destination.slice(3)
+          : destination.replace(/^\.\//, '');
       if (nextDirectory && !folders.includes(nextDirectory)) {
         result.text = `cd: no such directory: ${destination}\nRun ls to list available folders.`;
       } else {
@@ -86,6 +106,14 @@ export const TerminalExplorer = () => {
           ? `Changed directory to ${pathFor(nextDirectory)}\n\n${folderFiles[nextDirectory].join('   ')}`
           : `Returned to home.\n\n${folders.join('/   ')}/   resume.pdf`;
       }
+    } else if (normalized === 'search' || normalized.startsWith('search ')) {
+      const query = normalized.slice(6).trim();
+      const matches = projects.filter((project) => `${project.title} ${project.id} ${project.description} ${project.tags.join(' ')}`.toLowerCase().includes(query));
+      result.text = !query
+        ? 'Usage: search <term>  (examples: search python, search ai, search workflow)'
+        : matches.length
+          ? `${matches.map((project) => `${project.title} [${project.id}]`).join('\n')}\n\nUse open <project-id> to view details and links.`
+          : `No projects found for '${query}'. Try searching a technology or project name.`;
     } else if (['whoami', 'about'].includes(normalized)) {
       result.text = 'Aayush Angal\nAI/ML intern at Prorigo and Electronics & Telecommunication undergraduate at PICT. I build enterprise AI workflows, backend systems, and data-driven products.';
     } else if (['skills', 'stack', 'cat skills.txt'].includes(normalized)) {
@@ -94,21 +122,24 @@ export const TerminalExplorer = () => {
       result.text = 'Current resume —';
       result.links = [{ label: 'Download Aayush_Angal_Resume.pdf', href: '/resume.pdf', download: true }];
     } else if (normalized.startsWith('cat ')) {
-      const file = normalized.slice(4).split('/').pop() ?? '';
+      const filePath = normalized.slice(4).replace(/^~\/?/, '').replace(/^\//, '');
+      const fileParts = filePath.split('/');
+      const file = fileParts.pop() ?? '';
+      const fileDirectory = fileParts.find((part) => folders.includes(part)) ?? commandDirectory;
       const project = findProject(file);
       if (project) {
-        result.text = `${project.title}\n\n${project.description}\n\nStack: ${project.tags.join(' · ')}`;
+        result.text = `${project.title}\n\n${project.description}\n\nStack: ${project.tags.join(' · ')}${project.githubVisibility === 'private' ? '\n\nSource repository is private.' : ''}`;
         result.links = getProjectLinks(project);
-      } else if (file === 'readme.md' && commandDirectory === 'experience') {
+      } else if (file === 'readme.md' && fileDirectory === 'experience') {
         const role = timeline.find((item) => item.type === 'experience');
         result.text = role
           ? `${role.title} · ${role.organization}\n${role.period} · ${role.location}\n\n${role.description.map((item) => `• ${item}`).join('\n')}`
           : 'Experience details are not available.';
-      } else if (file === 'transcript.txt' || (file === 'readme.md' && commandDirectory === 'education')) {
+      } else if (file === 'transcript.txt' || (file === 'readme.md' && fileDirectory === 'education')) {
         result.text = timeline.filter((item) => item.type === 'education').map((item) => `${item.title}\n${item.organization} · ${item.location}\n${item.period}\n${item.description.join(' · ')}`).join('\n\n');
       } else if (file === 'certificates.txt' || file === 'achievements.txt') {
         result.text = 'Certificates: Machine Learning Course (2024), Python: From Scratch to Advanced (95%).\nAchievements: HacXLerate AI/Tech Competition — 1st Runner-Up; Odoo Hackathon — Finalist; Ignisia AI Hackathon — Finalist.';
-      } else if (file === 'links.txt' || (file === 'readme.md' && commandDirectory === 'contact')) {
+      } else if (file === 'links.txt' || (file === 'readme.md' && fileDirectory === 'contact')) {
         result.text = 'Contact and profiles:';
         result.links = [
           { label: 'Email · angalaayush646@gmail.com', href: 'mailto:angalaayush646@gmail.com' },
@@ -121,7 +152,14 @@ export const TerminalExplorer = () => {
         result.text = `cat: ${file}: file not found\nUse ls to list the current folder.`;
       }
     } else if (normalized.startsWith('open ')) {
-      const project = findProject(normalized.slice(5).replace(/^projects\//, ''));
+      const destination = normalized.slice(5).replace(/^~\/?projects\//, '').replace(/^projects\//, '').replace(/\/$/, '');
+      if (folders.includes(destination)) {
+        setDirectory(destination);
+        result.text = `${destination}/\n\n${folderFiles[destination].join('   ')}`;
+        setOutputs((current) => [...current, result].slice(-30));
+        return;
+      }
+      const project = findProject(destination);
       if (!project) {
         result.text = 'Project not found. Use cd projects, then ls to browse project files.';
       } else {
@@ -165,8 +203,24 @@ export const TerminalExplorer = () => {
       const partial = input.toLowerCase();
       const choices = partial.startsWith('cd ')
         ? folders.map((folder) => `cd ${folder}`).filter((item) => item.startsWith(partial))
-        : completionCommands.filter((item) => item.startsWith(partial));
+        : partial.startsWith('cat ')
+          ? [...new Set([...Object.values(folderFiles).flat(), ...projects.map((project) => `${project.id}.md`)])].map((file) => `cat ${file}`).filter((item) => item.startsWith(partial))
+          : partial.startsWith('open ')
+            ? projects.map((project) => `open ${project.id}`).filter((item) => item.startsWith(partial))
+            : completionCommands.filter((item) => item.startsWith(partial));
       if (choices.length === 1) setInput(choices[0]);
+      else if (choices.length > 1) {
+        setOutputs((current) => [...current, {
+          command: input,
+          directory,
+          text: `Possible completions:\n${choices.map((choice) => `  ${choice}`).join('\n')}`,
+        }].slice(-30));
+      }
+    } else if (event.ctrlKey && event.key.toLowerCase() === 'l') {
+      event.preventDefault();
+      setOutputs([]);
+    } else if (event.key === 'Escape') {
+      setInput('');
     }
   };
 

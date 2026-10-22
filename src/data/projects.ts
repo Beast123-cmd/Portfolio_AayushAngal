@@ -27,7 +27,7 @@ export const projects: Project[] = [
     id: 'researchsync',
     title: 'ResearchSync — Research Publication Management System',
     description: 'A centralized publication platform for PICT that streamlines faculty submissions, verification, and accreditation reporting. Its PDF-to-structured-data pipeline validates extracted metadata and routes incomplete or inconsistent records for coordinator review.',
-    image: 'project-chatpdf',
+    image: 'project-researchsync',
     tags: ['FastAPI', 'PostgreSQL', 'React', 'PDF Processing', 'Data Validation'],
     category: 'platform',
     github: 'https://github.com/Beast123-cmd/ResearchSync',

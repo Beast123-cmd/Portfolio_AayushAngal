@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, Download } from 'lucide-react';
 import TextType from './TextType';
 import { Button } from '@/components/ui/button';
-import { HeroTerminal } from './HeroTerminal';
 import { useNavigate } from 'react-router-dom';
+import avatar from '@/assets/avatar.jpg';
 
 export const Hero = () => {
   const navigate = useNavigate();
@@ -108,14 +108,21 @@ export const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Interactive command line portfolio explorer */}
+          {/* Profile visual */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative order-1 lg:order-2 flex min-h-[350px] items-center sm:min-h-[400px] lg:min-h-[550px]"
+            className="relative order-1 lg:order-2 flex min-h-[300px] items-center justify-center sm:min-h-[400px] lg:min-h-[550px]"
           >
-            <HeroTerminal />
+            <div className="absolute inset-8 rounded-full bg-primary/10 blur-3xl" />
+            <motion.img
+              src={avatar}
+              alt="Aayush Angal"
+              className="relative h-64 w-64 rounded-full border border-primary/30 object-cover shadow-2xl shadow-primary/15 sm:h-80 sm:w-80 lg:h-[26rem] lg:w-[26rem]"
+              whileHover={{ scale: 1.025 }}
+              transition={{ duration: 0.3 }}
+            />
           </motion.div>
         </div>
       </div>
