@@ -94,7 +94,7 @@ export const Hero = () => {
                 </a>
               </Button>
               <button
-                onClick={() => navigate('/terminal')}
+                onClick={() => navigate('/terminal/')}
                 className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border/50 bg-card/50 backdrop-blur-sm text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
               >
                 <span className="text-sm font-medium">Open Terminal</span>

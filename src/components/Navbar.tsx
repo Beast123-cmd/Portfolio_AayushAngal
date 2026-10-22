@@ -52,7 +52,7 @@ export const Navbar = () => {
   }, []);
 
   const navItems = useMemo(() => [
-    { label: 'Terminal', href: '/terminal' },
+    { label: 'Terminal', href: '/terminal/' },
     { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
     { label: 'Experience', href: '#experience' },
@@ -62,8 +62,8 @@ export const Navbar = () => {
   ], []);
 
   const scrollToSection = useCallback((href: string) => {
-    if (href === '/terminal') {
-      navigate('/terminal');
+    if (href === '/terminal/') {
+      navigate('/terminal/');
       return;
     }
     if (href === '#') {
