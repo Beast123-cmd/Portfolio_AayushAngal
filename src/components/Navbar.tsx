@@ -11,7 +11,7 @@ export const Navbar = () => {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const sections = ['about', 'projects', 'experience', 'education', 'certificates', 'contact'];
+          const sections = ['terminal', 'about', 'projects', 'experience', 'education', 'certificates', 'contact'];
           const scrollPosition = window.scrollY + 100;
           let newActiveSection = '#';
 
@@ -50,6 +50,7 @@ export const Navbar = () => {
   }, []);
 
   const navItems = useMemo(() => [
+    { label: 'Terminal', href: '#terminal' },
     { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
     { label: 'Experience', href: '#experience' },

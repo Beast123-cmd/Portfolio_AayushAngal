@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { HeroTerminal } from './HeroTerminal';
 
 export const Hero = () => {
-  const scrollToAbout = () => {
-    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToTerminal = () => {
+    document.getElementById('terminal')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -95,10 +95,10 @@ export const Hero = () => {
                 </a>
               </Button>
               <button
-                onClick={scrollToAbout}
+                onClick={scrollToTerminal}
                 className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border/50 bg-card/50 backdrop-blur-sm text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
               >
-                <span className="text-sm font-medium">Explore my work</span>
+                <span className="text-sm font-medium">Open Terminal</span>
                 <motion.div
                   animate={{ y: [0, 4, 0] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
