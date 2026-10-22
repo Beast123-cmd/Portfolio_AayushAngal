@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import PillNav from './PillNav';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('#');
   const lastActiveSectionRef = useRef('#');
 
@@ -11,7 +13,7 @@ export const Navbar = () => {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const sections = ['terminal', 'about', 'projects', 'experience', 'education', 'certificates', 'contact'];
+          const sections = ['about', 'projects', 'experience', 'education', 'certificates', 'contact'];
           const scrollPosition = window.scrollY + 100;
           let newActiveSection = '#';
 
@@ -50,7 +52,7 @@ export const Navbar = () => {
   }, []);
 
   const navItems = useMemo(() => [
-    { label: 'Terminal', href: '#terminal' },
+    { label: 'Terminal', href: '/terminal' },
     { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
     { label: 'Experience', href: '#experience' },
@@ -60,13 +62,17 @@ export const Navbar = () => {
   ], []);
 
   const scrollToSection = useCallback((href: string) => {
+    if (href === '/terminal') {
+      navigate('/terminal');
+      return;
+    }
     if (href === '#') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       const element = document.querySelector(href);
       element?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <PillNav

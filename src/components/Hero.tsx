@@ -1,13 +1,12 @@
 import { motion } from 'framer-motion';
-import { ArrowDown, Download } from 'lucide-react';
+import { ArrowUpRight, Download } from 'lucide-react';
 import TextType from './TextType';
 import { Button } from '@/components/ui/button';
 import { HeroTerminal } from './HeroTerminal';
+import { useNavigate } from 'react-router-dom';
 
 export const Hero = () => {
-  const scrollToTerminal = () => {
-    document.getElementById('terminal')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const navigate = useNavigate();
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -95,15 +94,15 @@ export const Hero = () => {
                 </a>
               </Button>
               <button
-                onClick={scrollToTerminal}
+                onClick={() => navigate('/terminal')}
                 className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-border/50 bg-card/50 backdrop-blur-sm text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
               >
                 <span className="text-sm font-medium">Open Terminal</span>
                 <motion.div
-                  animate={{ y: [0, 4, 0] }}
+                  animate={{ x: [0, 3, 0], y: [0, -3, 0] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
                 >
-                  <ArrowDown className="h-4 w-4" />
+                  <ArrowUpRight className="h-4 w-4" />
                 </motion.div>
               </button>
             </motion.div>

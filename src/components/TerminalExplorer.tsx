@@ -1,130 +1,140 @@
-import { FormEvent, KeyboardEvent, useRef, useState } from 'react';
-import { ArrowUpRight, ChevronRight, Minus, Square, X } from 'lucide-react';
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { ArrowLeft, ChevronRight, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { projects } from '@/data/projects';
+import { timeline } from '@/data/experience';
+import { skillCategories } from '@/data/skills';
 
-type Output = {
-  command: string;
-  directory: string;
-  text: string;
-  section?: string;
-  href?: string;
+type TerminalLink = { label: string; href: string; download?: boolean };
+type Output = { command: string; directory: string; text: string; links?: TerminalLink[] };
+
+const folders = ['about', 'projects', 'experience', 'education', 'awards', 'contact'];
+const folderFiles: Record<string, string[]> = {
+  about: ['README.md', 'skills.txt'],
+  projects: projects.map((project) => `${project.id}.md`),
+  experience: ['README.md', 'resume.pdf'],
+  education: ['README.md', 'transcript.txt'],
+  awards: ['certificates.txt', 'achievements.txt'],
+  contact: ['README.md', 'links.txt'],
 };
+const completionCommands = ['help', 'ls', 'pwd', 'whoami', 'skills', 'resume', 'history', 'clear', 'exit', 'cd ..'];
 
-const folders: Record<string, { section: string; files: string[] }> = {
-  about: { section: 'about', files: ['README.md', 'skills.txt'] },
-  projects: { section: 'projects', files: projects.map((project) => `${project.id}.md`) },
-  experience: { section: 'experience', files: ['README.md', 'resume.pdf'] },
-  education: { section: 'education', files: ['README.md', 'transcript.txt'] },
-  awards: { section: 'certificates', files: ['certificates.txt', 'achievements.txt'] },
-  contact: { section: 'contact', files: ['README.md', 'links.txt'] },
-};
+const pathFor = (directory: string) => directory ? `~/${directory}` : '~';
 
-const commandSuggestions = [
-  'help', 'ls', 'pwd', 'whoami', 'skills', 'projects', 'experience', 'education', 'awards', 'contact',
-  'resume', 'clear', 'history', 'cd ..', ...Object.keys(folders).map((folder) => `cd ${folder}`),
-];
-
-const formatPath = (directory: string) => directory ? `~/${directory}` : '~';
-
-const findProject = (value: string) => {
-  const query = value.toLowerCase().replace(/\.md$/, '').replace(/[-_]/g, ' ').trim();
+const findProject = (raw: string) => {
+  const query = raw.toLowerCase().replace(/\.md$/, '').replace(/[-_]/g, ' ').trim();
   return projects.find((project) => project.id === query.replace(/\s+/g, '-') || project.title.toLowerCase().includes(query));
 };
 
+const getProjectLinks = (project: (typeof projects)[number]): TerminalLink[] => {
+  const links: TerminalLink[] = [];
+  if (project.github && project.githubVisibility !== 'private') links.push({ label: 'Source code', href: project.github });
+  if (project.demo) links.push({ label: 'Live demo', href: project.demo });
+  return links;
+};
+
 export const TerminalExplorer = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState('');
   const [directory, setDirectory] = useState('');
   const [outputs, setOutputs] = useState<Output[]>([]);
   const [history, setHistory] = useState<string[]>([]);
   const [historyPosition, setHistoryPosition] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
+  }, [outputs]);
 
   const execute = (rawCommand: string) => {
     const command = rawCommand.trim().replace(/\s+/g, ' ');
     const normalized = command.toLowerCase();
-    const currentDirectory = directory;
-    const entry: Output = { command, directory: currentDirectory, text: '' };
+    const commandDirectory = directory;
+    const result: Output = { command, directory: commandDirectory, text: '' };
 
     if (!command) return;
     if (['clear', 'cls'].includes(normalized)) {
       setOutputs([]);
       return;
     }
+    if (['exit', 'quit', 'back'].includes(normalized)) {
+      navigate('/');
+      return;
+    }
 
     if (['help', '?'].includes(normalized)) {
-      entry.text = 'ls · cd <folder> · cd .. · pwd · cat <file> · open <project> · whoami · skills · resume · history\nFolders: about/ projects/ experience/ education/ awards/ contact/';
+      result.text = 'Portfolio commands (read-only):\n  ls                         list folders or files\n  cd <folder>                enter a folder\n  cd ..                      return to the home directory\n  cat <file>                 read a portfolio file\n  open <project>             view a project and its links\n  pwd · whoami · skills · resume · history · clear · exit\nFolders: about/ projects/ experience/ education/ awards/ contact/';
     } else if (normalized === 'pwd') {
-      entry.text = `/home/aayush${currentDirectory ? `/${currentDirectory}` : ''}`;
+      result.text = `/home/aayush${directory ? `/${directory}` : ''}`;
     } else if (['ls', 'dir'].includes(normalized)) {
-      entry.text = currentDirectory
-        ? folders[currentDirectory]?.files.join('   ') ?? 'No files here.'
-        : 'about/   projects/   experience/   education/   awards/   contact/   resume.pdf';
+      result.text = directory ? folderFiles[directory].join('   ') : `${folders.join('/   ')}/   resume.pdf`;
     } else if (normalized === 'history') {
-      entry.text = history.length ? history.map((item, index) => `${index + 1}  ${item}`).join('\n') : 'No commands yet.';
+      result.text = history.length ? history.map((item, index) => `${String(index + 1).padStart(2, ' ')}  ${item}`).join('\n') : 'No commands entered yet.';
     } else if (normalized === 'cd' || normalized.startsWith('cd ')) {
       const destination = normalized.replace(/^cd\s*/, '').replace(/^~\/?/, '').replace(/^\//, '');
       const nextDirectory = ['', '.', '..'].includes(destination) ? '' : destination.replace(/\/$/, '');
-      if (nextDirectory && !folders[nextDirectory]) {
-        entry.text = `No such folder: ${destination}. Use ls to see available folders.`;
+      if (nextDirectory && !folders.includes(nextDirectory)) {
+        result.text = `cd: no such directory: ${destination}\nRun ls to list available folders.`;
       } else {
         setDirectory(nextDirectory);
-        entry.text = nextDirectory
-          ? `Changed directory to ${formatPath(nextDirectory)}\n${folders[nextDirectory].files.join('   ')}`
-          : 'Returned to home. Folders: about/   projects/   experience/   education/   awards/   contact/';
-        entry.section = nextDirectory ? folders[nextDirectory].section : 'terminal';
+        result.text = nextDirectory
+          ? `Changed directory to ${pathFor(nextDirectory)}\n\n${folderFiles[nextDirectory].join('   ')}`
+          : `Returned to home.\n\n${folders.join('/   ')}/   resume.pdf`;
       }
     } else if (['whoami', 'about'].includes(normalized)) {
-      entry.text = 'Aayush Angal — AI/ML intern at Prorigo, building enterprise AI workflows, backend systems, and data-driven products.';
-      entry.section = 'about';
+      result.text = 'Aayush Angal\nAI/ML intern at Prorigo and Electronics & Telecommunication undergraduate at PICT. I build enterprise AI workflows, backend systems, and data-driven products.';
     } else if (['skills', 'stack', 'cat skills.txt'].includes(normalized)) {
-      entry.text = 'Python · TypeScript · React · FastAPI · Node.js · LangGraph · PostgreSQL · C++';
-      entry.section = 'about';
-    } else if (['projects', 'experience', 'education', 'awards', 'contact'].includes(normalized)) {
-      return execute(`cd ${normalized}`);
-    } else if (['resume', 'cv', 'download resume'].includes(normalized) || normalized === 'cat resume.pdf') {
-      entry.text = 'Current resume — download PDF';
-      entry.href = '/resume.pdf';
+      result.text = skillCategories.map((category) => `${category.title}: ${category.items.join(', ')}`).join('\n');
+    } else if (['resume', 'cv', 'download resume', 'cat resume.pdf'].includes(normalized)) {
+      result.text = 'Current resume —';
+      result.links = [{ label: 'Download Aayush_Angal_Resume.pdf', href: '/resume.pdf', download: true }];
     } else if (normalized.startsWith('cat ')) {
       const file = normalized.slice(4).split('/').pop() ?? '';
       const project = findProject(file);
       if (project) {
-        entry.text = `${project.title}\n${project.description}\nStack: ${project.tags.join(', ')}`;
-        entry.section = 'projects';
-      } else if (file === 'readme.md' && currentDirectory === 'experience') {
-        entry.text = 'AI/ML Intern at Prorigo · Pune, India · Mar 2026 – Present\nBuilding enterprise agent workflows, application context tools, MCP integrations, and document RAG systems.';
-        entry.section = 'experience';
-      } else if (file === 'transcript.txt' || (file === 'readme.md' && currentDirectory === 'education')) {
-        entry.text = 'B.E. Electronics & Telecommunication · PICT · CGPA 9.58 · Aug 2023 – May 2027';
-        entry.section = 'education';
+        result.text = `${project.title}\n\n${project.description}\n\nStack: ${project.tags.join(' · ')}`;
+        result.links = getProjectLinks(project);
+      } else if (file === 'readme.md' && commandDirectory === 'experience') {
+        const role = timeline.find((item) => item.type === 'experience');
+        result.text = role
+          ? `${role.title} · ${role.organization}\n${role.period} · ${role.location}\n\n${role.description.map((item) => `• ${item}`).join('\n')}`
+          : 'Experience details are not available.';
+      } else if (file === 'transcript.txt' || (file === 'readme.md' && commandDirectory === 'education')) {
+        result.text = timeline.filter((item) => item.type === 'education').map((item) => `${item.title}\n${item.organization} · ${item.location}\n${item.period}\n${item.description.join(' · ')}`).join('\n\n');
       } else if (file === 'certificates.txt' || file === 'achievements.txt') {
-        entry.text = 'Machine Learning · Advanced Python · HacXLerate AI/Tech runner-up · Odoo Hackathon finalist · Ignisia AI Hackathon finalist';
-        entry.section = 'certificates';
-      } else if (file === 'links.txt' || (file === 'readme.md' && currentDirectory === 'contact')) {
-        entry.text = 'Email: angalaayush646@gmail.com\nGitHub: github.com/Beast123-cmd\nLinkedIn: linkedin.com/in/aayushangal';
-        entry.section = 'contact';
+        result.text = 'Certificates: Machine Learning Course (2024), Python: From Scratch to Advanced (95%).\nAchievements: HacXLerate AI/Tech Competition — 1st Runner-Up; Odoo Hackathon — Finalist; Ignisia AI Hackathon — Finalist.';
+      } else if (file === 'links.txt' || (file === 'readme.md' && commandDirectory === 'contact')) {
+        result.text = 'Contact and profiles:';
+        result.links = [
+          { label: 'Email · angalaayush646@gmail.com', href: 'mailto:angalaayush646@gmail.com' },
+          { label: 'GitHub · Beast123-cmd', href: 'https://github.com/Beast123-cmd' },
+          { label: 'LinkedIn · aayushangal', href: 'https://linkedin.com/in/aayushangal' },
+        ];
       } else if (file === 'readme.md' || file === 'about.md') {
-        entry.text = 'Electronics and Telecommunication undergraduate at PICT. I build context-aware AI tools and backend systems for real-world workflows.';
-        entry.section = 'about';
+        result.text = 'Aayush Angal\nElectronics and Telecommunication undergraduate at PICT. I build context-aware AI tools and backend systems for real-world workflows.';
       } else {
-        entry.text = `File not found: ${file}. Use ls to see available files.`;
+        result.text = `cat: ${file}: file not found\nUse ls to list the current folder.`;
       }
     } else if (normalized.startsWith('open ')) {
       const project = findProject(normalized.slice(5).replace(/^projects\//, ''));
       if (!project) {
-        entry.text = 'Project not found. Use cd projects, then ls to browse projects.';
+        result.text = 'Project not found. Use cd projects, then ls to browse project files.';
       } else {
-        entry.text = `Opening ${project.title}${project.githubVisibility === 'private' ? ' (source is private)' : ''}.`;
-        entry.section = 'projects';
-        entry.href = project.demo ?? (project.githubVisibility !== 'private' ? project.github : undefined);
+        result.text = `${project.title}\n\n${project.description}\n\nStack: ${project.tags.join(' · ')}${project.githubVisibility === 'private' ? '\n\nSource repository is private.' : ''}`;
+        result.links = getProjectLinks(project);
       }
+    } else if (['projects', 'experience', 'education', 'awards', 'contact', 'about'].includes(normalized)) {
+      return execute(`cd ${normalized}`);
     } else {
-      entry.text = `Command not found: ${command}. Type help to see available commands.`;
+      result.text = `Command not found: ${command}\nType help to see available commands.`;
     }
 
-    setOutputs((current) => [...current, entry].slice(-8));
-    if (entry.section) {
-      window.setTimeout(() => document.getElementById(entry.section!)?.scrollIntoView({ behavior: 'smooth' }), 180);
-    }
+    setOutputs((current) => [...current, result].slice(-30));
   };
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -132,7 +142,9 @@ export const TerminalExplorer = () => {
     const value = input.trim();
     if (!value) return;
     execute(value);
-    setHistory((current) => [...current, value].slice(-30));
+    if (!['clear', 'cls', 'exit', 'quit', 'back'].includes(value.toLowerCase())) {
+      setHistory((current) => [...current, value].slice(-50));
+    }
     setHistoryPosition(-1);
     setInput('');
   };
@@ -152,103 +164,83 @@ export const TerminalExplorer = () => {
       event.preventDefault();
       const partial = input.toLowerCase();
       const choices = partial.startsWith('cd ')
-        ? Object.keys(folders).map((folder) => `cd ${folder}`).filter((item) => item.startsWith(partial))
-        : commandSuggestions.filter((item) => item.startsWith(partial));
+        ? folders.map((folder) => `cd ${folder}`).filter((item) => item.startsWith(partial))
+        : completionCommands.filter((item) => item.startsWith(partial));
       if (choices.length === 1) setInput(choices[0]);
     }
   };
 
-  const path = formatPath(directory);
+  const path = pathFor(directory);
 
   return (
-    <section id="terminal" className="py-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center">
-          <p className="mb-3 font-mono text-sm uppercase tracking-[0.2em] text-primary">Interactive portfolio shell</p>
-          <h2 className="mb-4 text-4xl font-bold sm:text-5xl">Explore with <span className="text-gradient">commands</span></h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">Browse portfolio folders, inspect project files, and jump to sections. Start with <code className="rounded bg-card px-2 py-1 font-mono text-primary">ls</code> or type <code className="rounded bg-card px-2 py-1 font-mono text-primary">help</code>.</p>
-        </div>
+    <main className="flex min-h-screen items-center justify-center bg-[#0b1220] px-3 py-6 text-slate-100 sm:px-6">
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+      <section aria-label="Interactive portfolio terminal" className="relative flex h-[min(760px,calc(100svh-3rem))] min-h-[500px] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-primary/25 bg-[#0b1220]/95 shadow-2xl shadow-primary/10 backdrop-blur-xl">
+        <header className="flex shrink-0 items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3 sm:px-5">
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigate('/')} aria-label="Return to portfolio" title="Return to portfolio" className="h-2.5 w-2.5 rounded-full bg-[#ff6b6b] transition-opacity hover:opacity-70" />
+            <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#ffd166]" />
+            <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#06d6a0]" />
+          </div>
+          <div className="font-mono text-xs text-slate-400 sm:text-sm">aayush@portfolio: {path}</div>
+          <button onClick={() => navigate('/')} aria-label="Exit terminal and return to portfolio" title="Return to portfolio" className="text-slate-500 transition-colors hover:text-slate-200">
+            <X className="h-4 w-4" />
+          </button>
+        </header>
 
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-primary/25 bg-[#0b1220]/95 text-left shadow-2xl shadow-primary/10">
-          <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.04] px-4 py-3 sm:px-5">
-            <div className="flex items-center gap-2" aria-hidden="true">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ff6b6b]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ffd166]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#06d6a0]" />
-            </div>
-            <div className="font-mono text-xs text-slate-400 sm:text-sm">aayush@portfolio: {path}</div>
-            <div className="flex items-center gap-2 text-slate-500" aria-hidden="true">
-              <Minus className="h-3.5 w-3.5" /><Square className="h-3 w-3" /><X className="h-3.5 w-3.5" />
-            </div>
+        <div ref={outputRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-5 font-mono text-xs leading-relaxed sm:px-7 sm:py-7 sm:text-sm">
+          <div className="mb-6 space-y-1 text-slate-300">
+            <p><span className="text-emerald-400">aayush@portfolio</span><span className="text-slate-500">:</span><span className="text-sky-300">~</span>$ <span className="text-white">./welcome.sh</span></p>
+            <p className="text-slate-400">Interactive portfolio terminal <span className="text-emerald-400">[online]</span></p>
+            <p className="text-slate-400">Browse folders and inspect files. Type <span className="text-primary">help</span> to get started.</p>
+            <p className="pt-2 text-slate-500">This is a read-only portfolio shell; commands do not run on a real system.</p>
           </div>
 
-          <div className="px-4 py-5 font-mono text-xs leading-relaxed sm:px-7 sm:py-7 sm:text-sm">
-            <div className="mb-5 space-y-1 text-slate-300">
-              <p><span className="text-emerald-400">aayush@portfolio</span><span className="text-slate-500">:</span><span className="text-sky-300">~</span>$ <span className="text-white">./explore.sh</span></p>
-              <p className="text-slate-400">Portfolio explorer ready <span className="text-emerald-400">[read-only]</span></p>
-              <p className="text-slate-400">Navigate with <span className="text-primary">cd</span>, list files with <span className="text-primary">ls</span>, inspect with <span className="text-primary">cat</span>.</p>
-            </div>
-
-            <div className="mb-5 max-h-72 space-y-4 overflow-y-auto pr-1" aria-live="polite" aria-relevant="additions text">
-              {outputs.map((output, index) => (
-                <div key={`${output.command}-${index}`} className="space-y-1">
-                  <p className="break-words"><span className="text-emerald-400">aayush@portfolio</span><span className="text-slate-500">:</span><span className="text-sky-300">{formatPath(output.directory)}</span>$ <span className="text-white">{output.command}</span></p>
-                  <div className="flex items-start justify-between gap-3 whitespace-pre-wrap break-words text-slate-400">
-                    <p>{output.text}</p>
-                    {output.href && (
-                      <a
-                        href={output.href}
-                        target={output.href.startsWith('/') ? undefined : '_blank'}
-                        rel={output.href.startsWith('/') ? undefined : 'noopener noreferrer'}
-                        download={output.href === '/resume.pdf' ? 'Aayush_Angal_Resume.pdf' : undefined}
-                        aria-label={output.href === '/resume.pdf' ? 'Download resume' : 'Open project link'}
-                        className="shrink-0 text-primary transition-colors hover:text-primary/80"
-                      >
-                        <ArrowUpRight className="h-4 w-4" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <form onSubmit={submit} className="flex items-center gap-2 border-t border-white/10 pt-4">
-              <label htmlFor="terminal-explorer-input" className="shrink-0 text-emerald-400"><span className="sr-only">Enter command</span><span aria-hidden="true">$</span></label>
-              <input
-                ref={inputRef}
-                id="terminal-explorer-input"
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="type a command..."
-                autoComplete="off"
-                spellCheck={false}
-                className="min-w-0 flex-1 bg-transparent text-slate-100 outline-none placeholder:text-slate-600 focus-visible:ring-0"
-              />
-              <button type="submit" aria-label="Run command" className="text-primary transition-transform hover:translate-x-0.5"><ChevronRight className="h-5 w-5" /></button>
-            </form>
-
-            <div className="mt-4 flex flex-wrap gap-2" aria-label="Suggested terminal commands">
-              {['ls', 'cd projects', 'cd experience', 'help'].map((quickCommand) => (
-                <button
-                  key={quickCommand}
-                  type="button"
-                  onClick={() => {
-                    execute(quickCommand);
-                    setHistory((current) => [...current, quickCommand].slice(-30));
-                    inputRef.current?.focus();
-                  }}
-                  className="rounded-md border border-white/10 px-2.5 py-1.5 text-[10px] text-slate-400 transition-colors hover:border-primary/40 hover:text-primary sm:text-xs"
-                >
-                  {quickCommand}
-                </button>
-              ))}
-              <span className="ml-auto self-center text-[10px] text-slate-600 sm:text-xs">↑↓ history · Tab completion</span>
-            </div>
+          <div className="space-y-5">
+            {outputs.map((output, index) => (
+              <article key={`${output.command}-${index}`} className="space-y-1.5">
+                <p className="break-words"><span className="text-emerald-400">aayush@portfolio</span><span className="text-slate-500">:</span><span className="text-sky-300">{pathFor(output.directory)}</span>$ <span className="text-white">{output.command}</span></p>
+                <div className="whitespace-pre-wrap break-words text-slate-300">{output.text}</div>
+                {output.links?.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target={link.href.startsWith('/') || link.href.startsWith('mailto:') ? undefined : '_blank'}
+                    rel={link.href.startsWith('/') || link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                    download={link.download ? 'Aayush_Angal_Resume.pdf' : undefined}
+                    className="inline-flex items-center gap-1.5 text-primary underline-offset-4 hover:underline"
+                  >
+                    {link.label}<ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                ))}
+              </article>
+            ))}
           </div>
         </div>
-        <p className="mx-auto mt-3 max-w-4xl text-right font-mono text-[10px] text-muted-foreground sm:text-xs">This portfolio shell does not run system commands.</p>
-      </div>
-    </section>
+
+        <div className="shrink-0 border-t border-white/10 bg-white/[0.02] px-4 py-4 sm:px-7">
+          <form onSubmit={submit} className="flex items-center gap-2 font-mono text-sm">
+            <span className="shrink-0 text-emerald-400" aria-hidden="true">aayush@portfolio:<span className="text-sky-300">{path}</span>$</span>
+            <label htmlFor="terminal-command-input" className="sr-only">Enter a terminal command</label>
+            <input
+              ref={inputRef}
+              id="terminal-command-input"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="type a command..."
+              autoComplete="off"
+              spellCheck={false}
+              className="min-w-0 flex-1 bg-transparent text-slate-100 outline-none placeholder:text-slate-600 focus-visible:ring-0"
+            />
+            <button type="submit" aria-label="Run command" className="text-primary transition-transform hover:translate-x-0.5"><ChevronRight className="h-5 w-5" /></button>
+          </form>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] text-slate-500 sm:text-xs">
+            <span>↑↓ history · Tab autocomplete</span>
+            <button onClick={() => navigate('/')} className="inline-flex items-center gap-1.5 text-slate-400 transition-colors hover:text-primary"><ArrowLeft className="h-3.5 w-3.5" /> return to portfolio</button>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 };
