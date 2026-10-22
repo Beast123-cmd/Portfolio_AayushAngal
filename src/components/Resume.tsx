@@ -6,7 +6,7 @@ import { timeline } from '@/data/experience';
 
 export const Resume = () => {
   return (
-    <section id="resume" className="py-20 bg-muted/30">
+    <section id="experience" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -16,10 +16,10 @@ export const Resume = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-            Experience & <span className="text-gradient">Education</span>
+            Work <span className="text-gradient">Experience</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            My professional journey and academic background
+            Professional roles and the work I've contributed to
           </p>
           <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:shadow-glow" asChild>
             <a href="/resume.pdf" download="Aayush_Angal_Resume.pdf">
@@ -29,8 +29,30 @@ export const Resume = () => {
           </Button>
         </motion.div>
 
-        <Timeline items={timeline} />
+        <Timeline items={timeline.filter((item) => item.type === 'experience')} />
       </div>
     </section>
   );
 };
+
+export const Education = () => (
+  <section id="education" className="py-20">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center mb-16"
+      >
+        <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+          <span className="text-gradient">Education</span>
+        </h2>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          Academic background and qualifications
+        </p>
+      </motion.div>
+      <Timeline items={timeline.filter((item) => item.type === 'education')} />
+    </div>
+  </section>
+);
