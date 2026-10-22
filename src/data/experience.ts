@@ -35,7 +35,6 @@ export const timeline: TimelineItem[] = [
     period: 'Aug 2023 - May 2027',
     description: [
       'CGPA: 9.58',
-      'B.E. undergraduate program in Electronics & Telecommunication',
     ],
   },
   {
