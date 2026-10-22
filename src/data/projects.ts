@@ -4,7 +4,7 @@ export interface Project {
   description: string;
   image: string;
   tags: string[];
-  category: 'ai' | 'platform' | 'web';
+  category: 'ai' | 'platform' | 'web' | 'systems';
   github?: string;
   githubVisibility?: 'public' | 'private';
   demo?: string;
@@ -56,6 +56,16 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    id: 'taskforge',
+    title: 'TaskForge — C++ Workflow Scheduler',
+    description: 'A local-first C++17 scheduler for dependency-aware command workflows. It runs jobs on a reusable worker pool, records scheduling decisions, and includes a terminal monitor for process trees, CPU, and memory.',
+    image: 'project-kaggle',
+    tags: ['C++17', 'Concurrency', 'DAG Scheduling', 'Worker Threads', 'CLI', 'Process Monitoring'],
+    category: 'systems',
+    github: 'https://github.com/Beast123-cmd/taskforge-cpp',
+    featured: false,
+  },
+  {
     id: 'library-management',
     title: 'Library Management System',
     description: 'A full-stack library application with role-based authentication, book availability tracking, and transaction management. Password hashing and database operations support secure, reliable use by multiple users.',
@@ -73,4 +83,5 @@ export const categories = [
   { id: 'ai', label: 'AI & Machine Learning' },
   { id: 'platform', label: 'Data & Research Platforms' },
   { id: 'web', label: 'Web Applications' },
+  { id: 'systems', label: 'Systems & Developer Tools' },
 ];
