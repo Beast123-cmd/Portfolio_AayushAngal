@@ -1,11 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Download } from 'lucide-react';
-import { Suspense, lazy } from 'react';
+import { ArrowRight, ArrowUpRight, Boxes, Braces, Database, Download } from 'lucide-react';
 import TextType from './TextType';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-
-const Spline = lazy(() => import('@splinetool/react-spline'));
 
 export const Hero = () => {
   const navigate = useNavigate();
@@ -20,14 +17,14 @@ export const Hero = () => {
 
       {/* Content Container */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[80vh]">
+        <div className="grid min-h-[80vh] items-center gap-10 lg:grid-cols-2 lg:gap-12">
           
           {/* Left Side - Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center lg:text-left order-2 lg:order-1"
+            className="w-full text-center lg:text-left"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -76,7 +73,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.6 }}
-              className="text-base sm:text-lg text-muted-foreground/80 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed"
+              className="text-base sm:text-lg text-muted-foreground/80 mb-10 max-w-xl mx-auto leading-relaxed lg:mx-0"
             >
               PICT Electronics and Telecommunication undergraduate and AI/ML Intern at Prorigo. I build enterprise AI workflows,
               backend integrations, and data-driven products with a focus on reliable, explainable software.
@@ -110,25 +107,62 @@ export const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Original interactive robot visual */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 32 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative order-1 lg:order-2 h-[350px] overflow-hidden sm:h-[400px] lg:h-[550px] xl:h-[600px]"
+            transition={{ delay: 0.35, duration: 0.7 }}
+            className="relative mx-auto w-full max-w-xl"
+            aria-label="Illustration of an AI workflow connecting data, orchestration, and useful outputs"
           >
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-primary/20 to-primary/10 blur-3xl" />
-            <Suspense fallback={
-              <div className="relative flex h-full w-full items-center justify-center" aria-label="Loading robot illustration">
-                <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary/30 border-t-primary" />
+            <div className="absolute -inset-8 rounded-full bg-primary/10 blur-3xl" />
+            <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-card/75 p-5 shadow-2xl shadow-primary/10 backdrop-blur-xl sm:p-7">
+              <div className="mb-8 flex items-center justify-between border-b border-border/70 pb-4">
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-[0.24em] text-primary">Systems in motion</p>
+                  <p className="mt-1 text-sm text-muted-foreground">From raw input to reliable outcomes</p>
+                </div>
+                <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 font-mono text-xs text-primary">AI / DATA</span>
               </div>
-            }>
-              <Spline
-                scene="https://prod.spline.design/j8QKnSumr15JHdFD/scene.splinecode"
-                className="relative h-full w-full"
-              />
-            </Suspense>
+
+              <div className="space-y-3">
+                <motion.div
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className="flex items-center gap-4 rounded-2xl border border-border/70 bg-background/60 p-4"
+                >
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Database className="h-5 w-5" /></span>
+                  <div className="min-w-0 flex-1"><p className="font-semibold">Connected data</p><p className="text-sm text-muted-foreground">Documents · APIs · user context</p></div>
+                  <span className="font-mono text-xs text-muted-foreground">01</span>
+                </motion.div>
+
+                <div className="flex justify-center text-primary/70" aria-hidden="true"><ArrowRight className="h-4 w-4 rotate-90" /></div>
+
+                <motion.div
+                  animate={{ y: [0, 3, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+                  className="flex items-center gap-4 rounded-2xl border border-primary/35 bg-primary/[0.08] p-4 shadow-[0_0_32px_hsl(var(--primary)/0.08)]"
+                >
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary"><Boxes className="h-5 w-5" /></span>
+                  <div className="min-w-0 flex-1"><p className="font-semibold">AI orchestration</p><p className="text-sm text-muted-foreground">Agents · tools · validation</p></div>
+                  <span className="font-mono text-xs text-primary">02</span>
+                </motion.div>
+
+                <div className="flex justify-center text-primary/70" aria-hidden="true"><ArrowRight className="h-4 w-4 rotate-90" /></div>
+
+                <div className="flex items-center gap-4 rounded-2xl border border-border/70 bg-background/60 p-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Braces className="h-5 w-5" /></span>
+                  <div className="min-w-0 flex-1"><p className="font-semibold">Useful outcomes</p><p className="text-sm text-muted-foreground">Structured answers · safer actions</p></div>
+                  <span className="font-mono text-xs text-muted-foreground">03</span>
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                <span>DESIGNED FOR REAL WORKFLOWS</span>
+              </div>
+            </div>
           </motion.div>
+
         </div>
       </div>
 
