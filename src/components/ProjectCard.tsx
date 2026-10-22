@@ -68,9 +68,16 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
               <div className="flex flex-wrap gap-3 mt-auto pt-6">
                 {project.github && (
                   <Button size="sm" variant="outline" asChild>
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={project.githubVisibility === 'private'
+                        ? `Open private GitHub repository for ${project.title}; access is required`
+                        : `View source code for ${project.title} on GitHub`}
+                    >
                       <Github className="mr-2 h-4 w-4" />
-                      Source code
+                      {project.githubVisibility === 'private' ? 'Private source' : 'Source code'}
                     </a>
                   </Button>
                 )}

@@ -6,6 +6,7 @@ export interface Project {
   tags: string[];
   category: 'ai' | 'platform' | 'web';
   github?: string;
+  githubVisibility?: 'public' | 'private';
   demo?: string;
   featured: boolean;
 }
@@ -18,6 +19,8 @@ export const projects: Project[] = [
     image: 'project-meds-ai',
     tags: ['Python', 'LangGraph', 'FastAPI', 'Next.js', 'PyTest'],
     category: 'ai',
+    github: 'https://github.com/Beast123-cmd/Medico.ai',
+    githubVisibility: 'private',
     featured: true,
   },
   {
@@ -27,6 +30,8 @@ export const projects: Project[] = [
     image: 'project-chatpdf',
     tags: ['FastAPI', 'PostgreSQL', 'React', 'PDF Processing', 'Data Validation'],
     category: 'platform',
+    github: 'https://github.com/Beast123-cmd/ResearchSync',
+    githubVisibility: 'private',
     featured: true,
   },
   {
@@ -36,6 +41,7 @@ export const projects: Project[] = [
     image: 'project-kaggle',
     tags: ['AI/ML', 'Data Analytics', 'Risk Scoring', 'Full-Stack'],
     category: 'ai',
+    github: 'https://github.com/Beast123-cmd/Elevra.ai',
     demo: 'https://elevra.engimind.cloud',
     featured: true,
   },
@@ -67,6 +73,7 @@ export const projects: Project[] = [
     tags: ['HTML', 'CSS', 'JavaScript', 'Flask', 'SQLite', 'Authentication'],
     category: 'web',
     github: 'https://github.com/Beast123-cmd/Library-Management-System',
+    demo: 'https://library-management-web-2tn0.onrender.com',
     featured: false,
   },
 ];
