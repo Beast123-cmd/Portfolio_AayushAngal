@@ -1,0 +1,787 @@
+.experience-shell {
+  --paper: #f2eee5;
+  --graphite: #252525;
+  --pencil: #78746e;
+  --coral: #e97855;
+  --cobalt: #4169a8;
+  --moss: #64806b;
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: clip;
+  color: var(--graphite);
+  background: var(--paper);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.experience-shell__canvas {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  background: var(--paper);
+  touch-action: pan-y;
+}
+
+.experience-shell__canvas::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-image: url("../assets/world/world-paper-graphite-grain.svg");
+  background-repeat: repeat;
+  background-size: 320px 320px;
+  content: "";
+  opacity: 0.42;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.r3f-diagnostic-banner {
+  position: fixed;
+  z-index: 10;
+  top: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--graphite);
+  background: var(--paper);
+  color: var(--graphite);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.r3f-diagnostic-panel {
+  position: fixed;
+  z-index: 9;
+  right: 1rem;
+  bottom: 1rem;
+  width: min(34rem, calc(100vw - 2rem));
+  max-height: min(70vh, 42rem);
+  overflow: auto;
+  border: 1px solid var(--graphite);
+  background: var(--paper);
+  color: var(--graphite);
+  padding: 1rem;
+  box-shadow: 0 4px 20px rgb(37 37 37 / 16%);
+  font-size: 0.8rem;
+}
+
+.r3f-diagnostic-panel h2,
+.r3f-diagnostic-panel h3 {
+  margin: 0 0 0.6rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.r3f-diagnostic-panel h3 { margin-top: 0.9rem; }
+.r3f-diagnostic-panel dl { display: grid; grid-template-columns: 10rem 1fr; gap: 0.35rem 0.75rem; margin: 0; }
+.r3f-diagnostic-panel dt { color: var(--pencil); }
+.r3f-diagnostic-panel dd { margin: 0; overflow-wrap: anywhere; }
+.r3f-diagnostic-panel pre { max-height: 12rem; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.r3f-diagnostic-panel button { border: 1px solid var(--graphite); background: var(--graphite); color: var(--paper); padding: 0.55rem 0.7rem; cursor: pointer; }
+
+.experience-shell__canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}
+
+.experience-shell__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--pencil);
+}
+
+.experience-shell__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  padding: clamp(1rem, 2.4vw, 2rem);
+  pointer-events: none;
+}
+
+.experience-shell__header,
+.experience-shell__quick-links,
+.experience-shell__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.experience-shell__header {
+  min-height: 2.5rem;
+}
+
+.experience-shell__wordmark,
+.experience-shell__quick-links a,
+.experience-shell__quick-links button,
+.experience-shell__footer {
+  color: var(--graphite);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+}
+
+.experience-shell__wordmark {
+  font-weight: 750;
+  letter-spacing: 0.13em;
+}
+
+.experience-shell__quick-links {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  pointer-events: auto;
+}
+
+.experience-shell__quick-links button,
+.experience-button {
+  border: 1px solid var(--graphite);
+  border-radius: 2px;
+  background: var(--graphite);
+  color: var(--paper);
+  cursor: pointer;
+  font: inherit;
+  padding: 0.72rem 0.9rem;
+  text-decoration: none;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.experience-shell__quick-links button {
+  padding: 0.45rem 0.65rem;
+  background: var(--paper);
+  color: var(--graphite);
+}
+
+.experience-button:hover,
+.experience-button:focus-visible {
+  border-color: var(--coral);
+  background: var(--coral);
+  color: #1f1c19;
+}
+
+.experience-shell a:focus-visible,
+.experience-shell button:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+}
+
+.experience-panel__eyebrow {
+  display: block;
+  margin: 0 0 0.7rem;
+  color: var(--pencil);
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.experience-panel__copy {
+  margin: 0.85rem 0 0;
+  color: #4b4945;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.experience-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+
+.experience-button--quiet {
+  background: transparent;
+  color: var(--graphite);
+}
+
+.experience-shell__footer {
+  margin-top: auto;
+  color: var(--pencil);
+  font-size: 0.68rem;
+  letter-spacing: 0.015em;
+}
+
+.experience-prototype__header,
+.experience-prototype__footer { pointer-events: none; }
+
+.experience-prototype__header a,
+.experience-prototype__header button,
+.prototype-layout button {
+  pointer-events: auto;
+}
+
+.prototype-layout {
+  display: grid;
+  min-height: calc(100svh - 6rem);
+  flex: 1;
+  grid-template-columns: minmax(245px, 310px) minmax(160px, 1fr) minmax(250px, 300px);
+  grid-template-rows: minmax(300px, 1fr) auto;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2rem);
+  padding: 1rem 0;
+  pointer-events: none;
+}
+
+.prototype-intro,
+.prototype-destinations,
+.prototype-study,
+.prototype-styleboard {
+  position: relative;
+  border: 1px solid rgba(37, 37, 37, 0.62);
+  background: rgba(242, 238, 229, 0.92);
+  box-shadow: 2px 3px 0 rgba(37, 37, 37, 0.12);
+  padding: clamp(0.9rem, 1.5vw, 1.25rem);
+  pointer-events: auto;
+}
+
+.prototype-intro {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  border-left: 3px double var(--graphite);
+}
+
+.prototype-intro h1 {
+  max-width: 13ch;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 3.3vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.99;
+}
+
+.prototype-intro .experience-button {
+  font-size: 0.78rem;
+}
+
+.prototype-destinations {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  padding-top: 0.85rem;
+  padding-bottom: 0.8rem;
+}
+
+.prototype-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.prototype-section-heading .experience-panel__eyebrow {
+  margin-bottom: 0.35rem;
+}
+
+.prototype-pencil-note {
+  color: var(--pencil);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+.experience-room-list {
+  display: grid;
+  margin: 0.3rem 0 0;
+  padding: 0;
+  border-top: 1px solid #b7b1a6;
+  list-style: none;
+}
+
+.experience-room-list__item {
+  display: flex;
+  width: 100%;
+  min-height: 2.45rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  border: 0;
+  border-bottom: 1px solid #b7b1a6;
+  background: transparent;
+  color: var(--graphite);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-align: left;
+}
+
+.experience-room-list__item[aria-current="location"] {
+  color: #a4432d;
+}
+
+.experience-room-list__item:hover,
+.experience-room-list__item:focus-visible {
+  color: #a4432d;
+}
+
+.prototype-door-action {
+  padding-top: 0.7rem;
+}
+
+.prototype-door-action .experience-button {
+  width: 100%;
+  font-size: 0.78rem;
+}
+
+.prototype-controls-hint,
+.prototype-method-note,
+.prototype-study__copy,
+.prototype-status,
+.prototype-landing {
+  margin: 0.7rem 0 0;
+  color: #4b4945;
+  font-size: 0.73rem;
+  line-height: 1.5;
+}
+
+.prototype-study {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+}
+
+.prototype-study__copy {
+  margin-top: 0.55rem;
+}
+
+.prototype-method {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.prototype-method button {
+  min-height: 2.2rem;
+  border: 1px solid #99938a;
+  background: transparent;
+  color: var(--graphite);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.prototype-method button[aria-pressed="true"] {
+  border-color: var(--graphite);
+  background: var(--graphite);
+  color: var(--paper);
+}
+
+.prototype-reveal {
+  width: 100%;
+  margin-top: 0.65rem;
+  font-size: 0.78rem;
+}
+
+.prototype-method-note {
+  min-height: 2.3em;
+  color: var(--pencil);
+  font-size: 0.67rem;
+}
+
+.prototype-styleboard {
+  display: grid;
+  grid-column: 3;
+  grid-row: 2;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  align-self: end;
+  padding: 0.8rem 0.9rem;
+}
+
+.prototype-styleboard__type {
+  display: grid;
+  gap: 0.18rem;
+  color: var(--pencil);
+  font-size: 0.59rem;
+  line-height: 1.35;
+}
+
+.prototype-styleboard__type strong {
+  color: var(--graphite);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.prototype-styleboard__strokes {
+  display: grid;
+  width: 2.2rem;
+  gap: 0.32rem;
+}
+
+.stroke-sample {
+  display: block;
+  height: 1px;
+  background: var(--graphite);
+}
+
+.stroke-sample--fine { height: 1px; opacity: 0.42; }
+.stroke-sample--medium { height: 2px; opacity: 0.8; }
+.stroke-sample--soft { height: 3px; background: repeating-linear-gradient(120deg, var(--pencil) 0 1px, transparent 1px 3px); }
+
+.prototype-swatches {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: 0.35rem;
+  border-top: 1px solid #c5beb2;
+  padding-top: 0.55rem;
+}
+
+.swatch {
+  width: 1.05rem;
+  height: 1.05rem;
+  border: 1px solid rgba(37, 37, 37, 0.45);
+  border-radius: 50%;
+}
+
+.swatch--paper { background: var(--paper); }
+.swatch--graphite { background: var(--graphite); }
+.swatch--coral { background: var(--coral); }
+.swatch--cobalt { background: var(--cobalt); }
+.swatch--moss { background: var(--moss); }
+
+.experience-prototype__footer {
+  padding-top: 0.65rem;
+}
+
+.world-door-label,
+.world-door-note,
+.world-exhibit-label {
+  display: block;
+  border: 1px solid rgba(37, 37, 37, 0.65);
+  background: #f2eee5;
+  color: #252525;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.11em;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
+.world-door-label.is-selected {
+  border-color: #a4432d;
+  color: #a4432d;
+}
+
+.world-door-note {
+  border: 0;
+  color: #a4432d;
+  font-size: 8px;
+}
+
+.world-exhibit-label {
+  font-size: 8px;
+  letter-spacing: 0.16em;
+}
+
+.world-dom-exhibit {
+  position: relative;
+  width: 320px;
+  aspect-ratio: 768 / 480;
+  overflow: hidden;
+  border: 1px solid rgba(37, 37, 37, 0.65);
+  background: var(--paper);
+  pointer-events: none;
+}
+
+.world-dom-exhibit img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.world-dom-exhibit__color {
+  transition: clip-path 1150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.prototype-status,
+.prototype-landing {
+  border-top: 1px solid #b7b1a6;
+  padding-top: 0.7rem;
+}
+
+.prototype-landing p {
+  margin: 0.4rem 0 0.7rem;
+}
+
+.simple-portfolio-view__return {
+  position: sticky;
+  z-index: 50;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem clamp(1rem, 3vw, 2rem);
+  background: var(--paper, #f2eee5);
+  color: var(--graphite, #252525);
+  font-size: 0.9rem;
+}
+
+.simple-portfolio-view__return p { margin: 0; }
+.simple-portfolio-view__return a { color: inherit; }
+.simple-portfolio-view__return details { max-width: min(100%, 70vw); }
+.simple-portfolio-view__return pre { max-height: 10rem; overflow: auto; white-space: pre-wrap; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+@media (max-width: 1050px) {
+  .prototype-layout {
+    grid-template-columns: minmax(225px, 0.8fr) minmax(220px, 0.8fr);
+    grid-template-rows: minmax(260px, 1fr) auto auto;
+  }
+
+  .prototype-intro { grid-column: 1; grid-row: 1; }
+  .prototype-destinations { grid-column: 1; grid-row: 2; }
+  .prototype-study { grid-column: 2; grid-row: 1; }
+  .prototype-styleboard { grid-column: 2; grid-row: 2; }
+}
+
+@media (max-width: 650px) {
+  .experience-shell { overflow: visible; }
+
+  .experience-shell__content {
+    min-height: 100svh;
+    padding: 0.8rem;
+  }
+
+  .experience-prototype__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .experience-shell__quick-links { justify-content: flex-start; }
+
+  .prototype-layout {
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 0.7rem;
+    padding: 0.8rem 0 1rem;
+  }
+
+  .prototype-intro,
+  .prototype-destinations,
+  .prototype-study,
+  .prototype-styleboard {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .prototype-intro h1 { max-width: 17ch; font-size: clamp(2rem, 11vw, 3rem); }
+  .experience-room-list__item { min-height: 2.8rem; }
+  .prototype-study { display: grid; grid-template-columns: 1fr auto; align-items: center; }
+  .prototype-section-heading,
+  .prototype-study__copy,
+  .prototype-method-note { grid-column: 1 / -1; }
+  .prototype-method { margin-top: 0; }
+  .prototype-reveal { grid-column: 1 / -1; }
+  .experience-prototype__footer { align-items: flex-start; flex-direction: column; gap: 0.3rem; }
+  .world-dom-exhibit { width: 250px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .experience-shell *,
+  .experience-shell *::before,
+  .experience-shell *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .world-dom-exhibit__color { transition-duration: 0.01ms !important; }
+}
+
+/* The corridor is the page; the controls float over it as a compact field guide. */
+.experience-prototype { height: 100svh; min-height: 100svh; overflow: hidden; }
+.experience-prototype__canvas { z-index: 0; }
+.experience-prototype__content { position: absolute; inset: 0; display: block; min-height: 0; padding: 0; }
+.experience-prototype__header { position: absolute; z-index: 4; top: 1rem; left: clamp(1rem, 3vw, 2.5rem); right: clamp(1rem, 3vw, 2.5rem); }
+.prototype-layout { position: relative; display: block; width: 100%; height: 100%; min-height: 0; padding: 0; }
+.prototype-intro,
+.prototype-destinations,
+.prototype-study {
+  border: 0;
+  background: rgba(242, 238, 229, 0.82);
+  box-shadow: none;
+  backdrop-filter: blur(2px);
+}
+.prototype-intro { position: absolute; top: 18%; left: clamp(1rem, 3vw, 2.5rem); width: min(25rem, 35vw); padding: 1rem 1.2rem; }
+.prototype-intro h1 { font-size: clamp(2rem, 4vw, 3.6rem); }
+.prototype-destinations { position: absolute; bottom: 3.7rem; left: 50%; width: min(860px, calc(100vw - 3rem)); transform: translateX(-50%); padding: .85rem 1rem; }
+.prototype-destinations .experience-room-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.prototype-destinations .experience-room-list__item { min-height: 2.7rem; padding: .35rem .55rem; }
+.prototype-destinations .prototype-controls-hint { margin-top: .45rem; }
+.prototype-study { position: absolute; top: 48%; right: clamp(1rem, 3vw, 2.5rem); width: min(17rem, 25vw); padding: .9rem 1rem; }
+.prototype-study__copy { display: none; }
+.prototype-styleboard { display: none; }
+.prototype-project-detail {
+  position: absolute;
+  z-index: 3;
+  top: 18%;
+  right: clamp(1rem, 3vw, 2.5rem);
+  width: min(30rem, 33vw);
+  max-height: 56vh;
+  overflow: auto;
+  border: 1px solid rgba(37, 37, 37, 0.72);
+  border-left: 3px double var(--graphite);
+  background: rgba(242, 238, 229, 0.94);
+  padding: 1rem 1.15rem;
+  box-shadow: 2px 3px 0 rgba(37, 37, 37, 0.12);
+}
+.prototype-project-detail h2 {
+  margin: 0.2rem 0 0.8rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+.prototype-project-detail__facts {
+  display: grid;
+  grid-template-columns: 7.8rem minmax(0, 1fr);
+  gap: 0.45rem 0.65rem;
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+.prototype-project-detail__facts dt { color: var(--pencil); font-weight: 700; }
+.prototype-project-detail__facts dd { margin: 0; }
+.prototype-project-detail__source { margin-top: 0.75rem; border-top: 1px solid #b7b1a6; padding-top: 0.55rem; font-size: 0.72rem; }
+.prototype-project-detail__source summary { cursor: pointer; }
+.prototype-project-detail__source p { margin: 0.45rem 0 0; line-height: 1.5; }
+.prototype-project-detail__links { display: flex; flex-wrap: wrap; gap: 0.55rem 1rem; margin-top: 0.75rem; }
+.prototype-project-detail__links a { color: var(--graphite); font-size: 0.76rem; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.lab-wall-label {
+  display: block;
+  border-bottom: 1px solid #77736c;
+  background: #f2eee5;
+  color: #393734;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.09em;
+  padding: 3px 5px;
+  white-space: nowrap;
+}
+.lab-wall-label.is-selected { border-color: #a4432d; color: #a4432d; }
+.experience-prototype__footer { position: absolute; right: clamp(1rem, 3vw, 2.5rem); bottom: .8rem; left: clamp(1rem, 3vw, 2.5rem); z-index: 3; margin: 0; }
+
+/* Keep the rendered architecture dominant after entering the corridor. */
+.experience-prototype.is-in-scene .prototype-intro {
+  top: 4.2rem;
+  width: min(15.5rem, 23vw);
+  padding: 0.65rem 0.8rem;
+  background: rgba(242, 238, 229, 0.78);
+}
+.experience-prototype.is-in-scene .prototype-intro .experience-panel__eyebrow { margin-bottom: 0.2rem; font-size: 0.56rem; }
+.experience-prototype.is-in-scene .prototype-intro h1 { font-size: clamp(1.45rem, 2vw, 1.9rem); }
+.experience-prototype.is-in-scene .prototype-intro > .experience-panel__copy { display: none; }
+.experience-prototype.is-in-scene .prototype-landing > p:not(.experience-panel__eyebrow) { font-size: 0.67rem; }
+.experience-prototype.is-in-scene .prototype-destinations {
+  bottom: 1.8rem;
+  width: min(700px, calc(100vw - 2rem));
+  padding: 0.55rem 0.75rem;
+  background: rgba(242, 238, 229, 0.82);
+}
+.experience-prototype.is-in-scene .prototype-destinations .experience-room-list__item { min-height: 2.2rem; font-size: 0.72rem; }
+.experience-prototype.is-in-scene .prototype-controls-hint { font-size: 0.64rem; }
+.experience-prototype.is-in-scene .prototype-study {
+  top: auto;
+  right: clamp(1rem, 3vw, 2.5rem);
+  bottom: 6.5rem;
+  width: min(13.5rem, 21vw);
+  padding: 0.6rem 0.7rem;
+  background: rgba(242, 238, 229, 0.8);
+}
+.experience-prototype.is-in-scene .prototype-study .experience-panel__eyebrow { font-size: 0.56rem; }
+.experience-prototype.is-in-scene .prototype-study .prototype-method-note { display: none; }
+.experience-prototype.is-in-scene .prototype-project-detail {
+  top: 4.2rem;
+  width: min(24rem, 27vw);
+  max-height: 43vh;
+  padding: 0.75rem 0.85rem;
+  background: rgba(242, 238, 229, 0.91);
+}
+.experience-prototype.is-in-scene .prototype-project-detail h2 { font-size: clamp(1.2rem, 1.7vw, 1.65rem); }
+.experience-prototype.is-in-scene .prototype-project-detail__facts { grid-template-columns: 6.6rem minmax(0, 1fr); gap: 0.35rem 0.5rem; font-size: 0.66rem; }
+.experience-prototype.is-in-scene .prototype-project-detail__source,
+.experience-prototype.is-in-scene .prototype-project-detail__links a { font-size: 0.68rem; }
+.experience-prototype.is-in-scene .prototype-reveal { margin-top: 0.45rem; padding: 0.55rem 0.7rem; font-size: 0.7rem; }
+
+@media (max-width: 760px) {
+  .experience-prototype__content { padding: 0; }
+  .experience-prototype__header { flex-direction: row; align-items: center; }
+  .prototype-intro { top: 13%; left: .8rem; width: min(22rem, calc(100vw - 1.6rem)); }
+  .prototype-intro h1 { max-width: 13ch; font-size: clamp(2rem, 9vw, 3rem); }
+  .prototype-destinations { bottom: 3.9rem; width: calc(100vw - 1rem); padding: .55rem .7rem; }
+  .prototype-destinations .experience-room-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prototype-destinations .experience-room-list__item { min-height: 2.35rem; font-size: .72rem; }
+  .prototype-study { top: auto; right: .8rem; bottom: 15rem; width: min(15rem, 58vw); padding: .65rem .75rem; }
+  .prototype-method { margin-top: .4rem; }
+  .prototype-method button { min-height: 2rem; padding: .3rem .45rem; }
+  .prototype-reveal { margin-top: .45rem; }
+  .experience-prototype__footer { flex-direction: column; align-items: flex-start; gap: .2rem; }
+  .experience-prototype.is-in-scene .prototype-intro { top: 4rem; left: .7rem; width: min(13rem, 43vw); padding: .5rem .6rem; }
+  .experience-prototype.is-in-scene .prototype-intro h1 { font-size: clamp(1.3rem, 5vw, 1.65rem); }
+  .experience-prototype.is-in-scene .prototype-destinations { bottom: 3.5rem; width: calc(100vw - 1rem); padding: .45rem .55rem; }
+  .experience-prototype.is-in-scene .prototype-study { right: .7rem; bottom: 8.9rem; width: min(12rem, 44vw); }
+}
+
+@media (max-width: 760px) {
+  .experience-prototype.is-in-lab { height: auto; overflow: visible; }
+  .is-in-lab .experience-prototype__content {
+    position: relative;
+    inset: auto;
+    display: flex;
+    min-height: 100svh;
+    flex-direction: column;
+    padding: 0.75rem;
+  }
+  .is-in-lab .experience-prototype__header {
+    position: relative;
+    inset: auto;
+    flex-direction: row;
+    align-items: center;
+  }
+  .is-in-lab .prototype-layout {
+    position: static;
+    display: flex;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 4.2rem 0 1rem;
+  }
+  .is-in-lab .prototype-intro,
+  .is-in-lab .prototype-destinations,
+  .is-in-lab .prototype-project-detail {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    transform: none;
+  }
+  .is-in-lab .prototype-intro { order: 0; }
+  .is-in-lab .prototype-intro h1 { max-width: 16ch; font-size: clamp(1.65rem, 8vw, 2.4rem); }
+  .is-in-lab .prototype-destinations { order: 1; }
+  .is-in-lab .prototype-project-detail { order: 2; padding: 0.85rem; }
+  .is-in-lab .prototype-project-detail__facts { grid-template-columns: minmax(6.5rem, 0.38fr) minmax(0, 1fr); }
+  .is-in-lab .prototype-destinations .experience-room-list { grid-template-columns: 1fr; }
+  .is-in-lab .experience-prototype__footer { position: relative; inset: auto; padding: 0.6rem 0 0.25rem; }
+}

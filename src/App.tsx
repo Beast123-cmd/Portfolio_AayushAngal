@@ -1,31 +1,23 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { Toaster } from "@/components/ui/toaster";
 import TerminalPage from "./pages/TerminalPage";
 import NotFound from "./pages/NotFound";
-import ExperienceShell from "./pages/ExperienceShell";
 
-const queryClient = new QueryClient();
+const ExperienceShell = lazy(() => import("@/graphite/pages/ExperienceShell"));
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/experience" element={<ExperienceShell />} />
-          <Route path="/terminal" element={<TerminalPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <>
+    <Toaster />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Suspense fallback={<main className="graphite-fallback" role="status">Loading the graphite world…</main>}><ExperienceShell /></Suspense>} />
+        <Route path="/experience" element={<Suspense fallback={<main className="graphite-fallback" role="status">Loading the graphite world…</main>}><ExperienceShell /></Suspense>} />
+        <Route path="/terminal" element={<TerminalPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  </>
 );
 
 export default App;

@@ -1,0 +1,54 @@
+:root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f2eee5; }
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; margin: 0; }
+body { min-width: 320px; min-height: 100svh; }
+button, a { font: inherit; }
+.graphite-fallback { --paper: #f2eee5; --ink: #252525; --pencil: #78746e; min-height: 100svh; padding: clamp(1rem, 3vw, 2.5rem); color: var(--ink); background: var(--paper); }
+.graphite-fallback__header, .graphite-fallback__caption, .graphite-fallback__footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.graphite-fallback__header { padding-bottom: 1.1rem; border-bottom: 1px solid #aaa49a; font-size: .7rem; letter-spacing: .1em; }
+.graphite-fallback__mark, .graphite-fallback__resume { color: inherit; text-decoration: none; }
+.graphite-fallback__mark span { color: var(--pencil); }
+.graphite-fallback__resume { border-bottom: 1px solid currentColor; padding: .25rem 0; }
+.graphite-fallback__scene { display: grid; grid-template-columns: minmax(14rem, .64fr) minmax(0, 1.5fr); align-items: center; gap: clamp(1rem, 4vw, 4rem); max-width: 1440px; margin: 3rem auto 0; }
+.graphite-fallback__heading p, .graphite-fallback__eyebrow { color: var(--pencil); font-size: .65rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.graphite-fallback__heading h1 { max-width: 9ch; margin: .85rem 0; font: 500 clamp(2.5rem, 5vw, 5rem)/.98 Georgia, "Times New Roman", serif; letter-spacing: -.06em; }
+.graphite-fallback__intro { max-width: 30rem; color: #4b4945; font-size: .95rem; line-height: 1.7; }
+.graphite-fallback__drawing { display: block; width: 100%; max-height: 65svh; border: 1px solid #827d74; box-shadow: 3px 4px 0 rgba(37,37,37,.11); }
+.graphite-fallback__color-layer { opacity: 0; transition: opacity .8s ease; }
+.graphite-fallback__drawing.is-color .graphite-fallback__color-layer { opacity: .8; }
+.graphite-fallback__caption { padding-top: .6rem; color: var(--pencil); font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; }
+.graphite-fallback__controls { display: grid; grid-template-columns: 1.2fr .8fr; gap: 2rem; max-width: 1440px; margin: 2rem auto 0; padding-top: 1rem; border-top: 1px solid #aaa49a; }
+.graphite-fallback__eyebrow { margin: 0 0 .7rem; }
+.graphite-fallback__doors { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); border-top: 1px solid #aaa49a; }
+.graphite-fallback__doors button { display: flex; min-height: 3rem; align-items: center; justify-content: space-between; gap: .5rem; padding: .6rem; border: 0; border-bottom: 1px solid #aaa49a; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+.graphite-fallback__doors button span:first-child { color: var(--pencil); font-size: .68rem; }
+.graphite-fallback__doors button[aria-pressed="true"] { color: #a4432d; }
+.graphite-fallback__doors button:focus-visible, .graphite-fallback__actions button:focus-visible, .graphite-fallback__resume:focus-visible { outline: 2px solid #a4432d; outline-offset: 3px; }
+.graphite-fallback__actions { display: flex; align-items: flex-start; flex-wrap: wrap; gap: .55rem; }
+.graphite-fallback__actions > p { flex-basis: 100%; margin: 0 0 .25rem; color: #4b4945; font-size: .8rem; }
+.graphite-fallback__actions button { min-height: 2.5rem; padding: .65rem .8rem; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); cursor: pointer; }
+.graphite-fallback__actions .graphite-fallback__return { background: transparent; color: var(--ink); }
+.graphite-fallback__notice { font-size: .75rem !important; }
+.graphite-fallback__details { flex-basis: 100%; font-size: .76rem; }
+.graphite-fallback__details pre { max-height: 10rem; overflow: auto; white-space: pre-wrap; }
+.graphite-fallback__footer { max-width: 1440px; margin: 2rem auto 0; padding-top: .8rem; border-top: 1px solid #c6c0b5; color: var(--pencil); font-size: .65rem; }
+.graphite-fallback__portfolio-index { display: grid; gap: .75rem; max-width: 1440px; width: 100%; margin: 2rem auto 0; }
+.graphite-fallback__portfolio-index details { border-top: 1px solid #aaa49a; padding: .85rem 0; }
+.graphite-fallback__portfolio-index summary { color: var(--ink); cursor: pointer; font-size: .78rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.graphite-fallback__portfolio-index ul, .graphite-fallback__portfolio-index ol { padding-left: 1.25rem; }
+.graphite-fallback__portfolio-index li { margin: .9rem 0; }
+.graphite-fallback__portfolio-index h2 { margin: .4rem 0; font: 500 1.1rem Georgia, "Times New Roman", serif; }
+.graphite-fallback__portfolio-index p, .graphite-fallback__portfolio-index li { color: #4b4945; font-size: .85rem; line-height: 1.6; }
+.graphite-fallback__portfolio-index a { color: #8e3d2a; text-underline-offset: .2em; }
+.graphite-fallback__links { display: flex; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 760px) {
+  .graphite-fallback__scene { grid-template-columns: 1fr; margin-top: 1.5rem; }
+  .graphite-fallback__heading h1 { max-width: 13ch; font-size: clamp(2.5rem, 12vw, 4rem); }
+  .graphite-fallback__drawing { max-height: unset; }
+  .graphite-fallback__controls { grid-template-columns: 1fr; gap: 1rem; margin-top: 1.2rem; }
+  .graphite-fallback__doors { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .graphite-fallback__footer { align-items: flex-start; flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

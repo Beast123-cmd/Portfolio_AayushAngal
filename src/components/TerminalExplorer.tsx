@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { projects } from '@/data/projects';
 import { timeline } from '@/data/experience';
 import { skillCategories } from '@/data/skills';
+import { recognition } from '@/data/recognition';
 
 type TerminalLink = { label: string; href: string; download?: boolean };
 type Output = { command: string; directory: string; text: string; links?: TerminalLink[] };
@@ -145,7 +146,8 @@ export const TerminalExplorer = () => {
         result.text = 'Current resume —';
         result.links = [{ label: 'Download Aayush_Angal_Resume.pdf', href: '/resume.pdf', download: true }];
       } else if (file === 'certificates.txt' || file === 'achievements.txt') {
-        result.text = 'Certificates: Machine Learning Course (2024), Python: From Scratch to Advanced (95%).\nAchievements: HacXLerate AI/Tech Competition — 1st Runner-Up; Odoo Hackathon — Finalist; Ignisia AI Hackathon — Finalist.';
+        result.text = recognition.map((item) => `${item.title}\n${item.description}`).join('\n\n');
+        result.links = recognition.filter((item) => item.link).map((item) => ({ label: `View ${item.title}`, href: item.link! }));
       } else if (file === 'links.txt' || (file === 'readme.md' && fileDirectory === 'contact')) {
         result.text = 'Contact and profiles:';
         result.links = [
