@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Award, ExternalLink, Trophy, Medal, Star } from 'lucide-react';
+import { Award, ExternalLink, Trophy, Medal, Star } from '@/lib/icons';
 
 interface Certificate {
   id: string;

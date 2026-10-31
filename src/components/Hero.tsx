@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Boxes, Braces, Database, Download } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Boxes, Braces, Database, Download } from '@/lib/icons';
 import TextType from './TextType';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, GraduationCap, Download } from 'lucide-react';
+import { Briefcase, GraduationCap, Download } from '@/lib/icons';
 import { TimelineItem as TimelineItemType } from '@/data/experience';
 
 interface TimelineProps {

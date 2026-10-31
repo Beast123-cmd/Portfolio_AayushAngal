@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BriefcaseBusiness, CalendarDays, Download, MapPin } from 'lucide-react';
+import { BriefcaseBusiness, CalendarDays, Download, MapPin } from '@/lib/icons';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Timeline } from './Timeline';

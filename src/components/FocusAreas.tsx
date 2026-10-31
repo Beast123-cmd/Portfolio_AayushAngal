@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BrainCircuit, Blocks, ShieldCheck } from 'lucide-react';
+import { BrainCircuit, Blocks, ShieldCheck } from '@/lib/icons';
 
 const focusAreas = [
   {

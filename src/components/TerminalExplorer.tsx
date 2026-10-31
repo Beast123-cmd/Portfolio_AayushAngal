@@ -1,5 +1,5 @@
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowUpRight, ChevronRight, X } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ChevronRight, X } from '@/lib/icons';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '@/data/projects';
 import { timeline } from '@/data/experience';
